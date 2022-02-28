@@ -1,0 +1,62 @@
+version: '3.7'
+
+volumes:
+    mysql-data:
+    redis-data:
+
+
+# MYSQL
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - 3000:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD_ROOT}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - TZ=America/Sao_Paulo
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # PHP (com Nginx)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    command: ./start.sh
+    ports:
+      - 8080:80
+    links:
+      - db:db
+    depends_on:
+      - db
+      - cache
+    restart: unless-stopped
+
+  # Redis
+  cache:
+    image: redis:alpine
+    container_name: redis
+    command: --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

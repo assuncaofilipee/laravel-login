@@ -1,0 +1,129 @@
+<?php
+
+namespace Tests\Feature\RegisterProfile;
+
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
+
+class RegisterProfileTest extends TestCase
+{
+    use DatabaseTransactions;
+
+    private $auth;
+    private $user;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->user = User::factory()->create([
+            'password' => Hash::make('123456ff')
+        ]);
+        $response = $this->post('/app/login', [
+            'email' => $this->user->email,
+            'password' => '123456ff'
+        ]);
+        $token = $response->json()['data']['access_token'];
+        $this->auth = [
+            'Authorization' => 'Bearer ' . $token
+        ];
+
+    }
+    /**
+     * @test
+     */
+    public function shouldRegisterProfile()
+    {
+        $response = $this->post('/app/user/profile', [
+            "first_name" => "Olávo",
+            "last_name" => "Sales",
+            "cpf" => "61906713065"
+        ], $this->auth);
+
+        $response->assertJsonStructure([
+            "success",
+            "data" => [
+                  "first_name",
+                  "last_name",
+                  "cpf",
+                  "user_id",
+                  "uuid",
+                  "updated_at",
+                  "created_at",
+                  "id"
+               ]
+         ]);
+
+        $response->assertSuccessful();
+    }
+
+    /**
+     * @test
+     */
+    public function shoudNotRegisterProfile()
+    {
+        $response = $this->post('/app/user/profile', [], $this->auth);
+
+        $response->assertJson(
+            [
+                "success" => "false",
+                "data" => [
+                  "first_name" => [
+                    0 => "O campo primeiro nome é obrigatório."
+                  ],
+                  "last_name" => [
+                    0 => "O campo sobrenome é obrigatório."
+                  ],
+                  "cpf" => [
+                    0 => "O campo cpf é obrigatório."
+                  ]
+                ]
+              ]);
+        $response->assertStatus(422);
+    }
+
+        /**
+     * @test
+     */
+    public function shoudNotRegisterUserAndReturnAllOthersErrors()
+    {
+        $response = $this->post('/app/user/profile',
+        ['first_name' => 'hakuna12', "last_name" => '123', 'cpf' => 00000], $this->auth);
+
+        $response->assertJson([
+            "success" => "false",
+            "data" => [
+              "first_name" => [
+                 "O campo primeiro nome só pode conter letras."
+              ],
+              "last_name" => [
+                 "O campo sobrenome só pode conter letras."
+              ],
+              "cpf" => [
+                 "CPF inválido"
+              ],
+            ]
+          ]);
+
+        $response->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    public function shoudNotRegisterProfilewithInvalidToken()
+    {
+        $response = $this->post('/app/user/profile');
+
+        $response->assertJson([
+            "success" => "false",
+            "data" => [
+              "message" => "Token de autorização não encontrado"
+            ]
+          ]);
+
+        $response->assertStatus(403);
+    }
+}

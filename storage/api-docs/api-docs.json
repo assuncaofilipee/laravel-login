@@ -1,0 +1,1176 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Documentação API Trouw",
+        "description": "Documentação desenvolvida para direcionar o desenvolvimento da aplicação Trouw mobile, nela se encontram todos os endpoints\n         necessários para o correto funcionamento da aplicação.",
+        "contact": {
+            "email": "contato@fabrika.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "api/documentation",
+            "description": "Local"
+        }
+    ],
+    "paths": {
+        "/app/login": {
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Autenticar usuário",
+                "description": "Retorna usuário logado",
+                "operationId": "3557031b690a5fffa06f6a746beebb15",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "register": {
+                                    "summary": "Login",
+                                    "value": {
+                                        "email": "exemplo@gmail.com",
+                                        "password": "123a123a"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login efetuado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/loginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Senha incorreta, favor revisar",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "false",
+                                    "data": {
+                                        "message": "Senha incorreta, favor revisar."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Campos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "password": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "login": {
+                                        "summary": "Campos obrigatórios",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "email": [
+                                                    "O campo email é obrigatório."
+                                                ],
+                                                "password": [
+                                                    "O campo senha é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "login2": {
+                                        "summary": "Campos inválidos",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "email": [
+                                                    "Email não cadastrado"
+                                                ],
+                                                "password": [
+                                                    "O campo senha deve ter pelo menos 8 caracteres"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/app/logout": {
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Desconectar usuário",
+                "description": "Desconecta um usuário conectado",
+                "operationId": "b4943fdd05165cd13f7ca5ffb1cd7a44",
+                "responses": {
+                    "200": {
+                        "description": "Usuário Desconectado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "message": "Usuário desconectado com sucesso"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/app/refresh": {
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Obter novo token",
+                "description": "Retorna informações do usuário e um novo token",
+                "operationId": "d61bf4ca518293a10d412a4b15e30dbc",
+                "responses": {
+                    "200": {
+                        "description": "Token atualizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/loginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/app/me": {
+            "get": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Obter dados do usuário conectado",
+                "description": "Retorna informações do usuário conectado",
+                "operationId": "65bc155b77c64a06e61ed54ed5458ce9",
+                "responses": {
+                    "200": {
+                        "description": "Dados do usuário conectado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/user"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "email": "teste@gmail.comffffffffff",
+                                        "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
+                                        "updated_at": "2022-02-09T19:32:49.000000Z",
+                                        "created_at": "2022-02-09T19:32:49.000000Z",
+                                        "id": 470
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/app/forgot-password": {
+            "post": {
+                "tags": [
+                    "Recuperação de senha"
+                ],
+                "summary": "Recuperar senha",
+                "description": "Envia um código de recuperação ao email informado.",
+                "operationId": "8ab089a3890141b41ae46576926b351c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "register": {
+                                    "summary": "Recuperar senha",
+                                    "value": {
+                                        "email": "exemplo@gmail.com"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Código de recuperação enviado ao email.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "message": "Código de recuperação de senha enviado ao seu email."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Email inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "false",
+                                    "data": {
+                                        "message": "E-mail não encontrado, favor revisar!"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/app/validate-password-token": {
+            "post": {
+                "tags": [
+                    "Recuperação de senha"
+                ],
+                "summary": "Validar código de verificação",
+                "description": "Válida código de verificação enviado ao email.",
+                "operationId": "92b050fe877d16500644c7ab0229441e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password_token": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "password_token": {
+                                    "summary": "Recuperar senha",
+                                    "value": {
+                                        "password_token": "z5xYKu"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Código de verificação válido,\n                        retorna um novo código de verificação,\n                        que será utilizado como parâmetro na rota new-password",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "password_token": "L025fa"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Código de verificação expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "false",
+                                    "data": {
+                                        "message": "Código de verificação expirado."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Código de verificação inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "Código verificação inválido": {
+                                        "summary": "Código verificação inválido",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "message": "Código de verificação inválido."
+                                            }
+                                        }
+                                    },
+                                    "Código de verificação maior que 6 caracteres": {
+                                        "summary": "Maior do que 6 caracteres",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "message": "O campo password token não pode ser superior a 6 caracteres."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/app/new-password": {
+            "post": {
+                "tags": [
+                    "Recuperação de senha"
+                ],
+                "summary": "Nova senha",
+                "description": "Criação de nova senha.",
+                "operationId": "7bb5bb1b00ed0607f37ba9f41b4e9476",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password_token": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "password_token": {
+                                    "summary": "Nova senha",
+                                    "value": {
+                                        "password_token": "L025fa",
+                                        "password": "123f123f",
+                                        "password_confirmation": "123f123f"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Senha alterada com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "message": "Senha alterada com sucesso."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Código de verificação expirado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "false",
+                                    "data": {
+                                        "message": "Código de verificação expirado."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Código de verificação inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "message": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "Código de verificação inválido": {
+                                        "summary": "Código de verificação inválido",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "message": "Código de verificação inválido."
+                                            }
+                                        }
+                                    },
+                                    "Código de verificação maior que 6 caracteres": {
+                                        "summary": "Maior do que 6 caracteres",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "message": "O campo password token não pode ser superior a 6 caracteres."
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/app/user/profile": {
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Cadastro de dados pessoais do usuário da API",
+                "description": "Cadastra os dados pessoais do usuário",
+                "operationId": "269666ac597baa6da300b7e89085fb2d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "register-profile": {
+                                    "summary": "Exemplo cpf sem separador",
+                                    "value": {
+                                        "first_name": "Olávo",
+                                        "last_name": "Sales",
+                                        "cpf": "61906713065"
+                                    }
+                                },
+                                "register-profile1": {
+                                    "summary": "Exemplo cpf com separador",
+                                    "value": {
+                                        "first_name": "Olávo",
+                                        "last_name": "Sales",
+                                        "cpf": "619.067.130-65"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cadastro feito com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/profileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Campos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "password": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "obrigatório": {
+                                        "summary": "Campos obrigatórios",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "email": [
+                                                    "O campo primeiro nome é obrigatório."
+                                                ],
+                                                "password": [
+                                                    "O campo sobrenome é obrigatório."
+                                                ],
+                                                "terms_of_use": [
+                                                    "O campo cpf é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "comfirmação": {
+                                        "summary": "Campos inválidos",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "first_name": [
+                                                    "O campo primeiro nome só pode conter letras.",
+                                                    "O campo primeiro nome não pode ser superior a 50 caracteres."
+                                                ],
+                                                "last_name": [
+                                                    "O campo sobrenome só pode conter letras.",
+                                                    "O campo sobrenome não pode ser superior a 100 caracteres."
+                                                ],
+                                                "cpf": [
+                                                    "O campo cpf já está sendo utilizado.",
+                                                    "CPF inválido"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/app/user/register": {
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Cadastro de usuário para utilização da API",
+                "description": "Retorna as informações do usuário cadastrado",
+                "operationId": "9b022d4c003f3c09691db23d553d559c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "email_confirmation": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    },
+                                    "terms_of_use": {
+                                        "type": "boolean"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "register": {
+                                    "summary": "Cadastro de usuário",
+                                    "value": {
+                                        "email": "exemplo@gmail.com",
+                                        "email_confirmation": "exemplo@gmail.com",
+                                        "password": "123a123a",
+                                        "password_confirmation": "123a123a",
+                                        "terms_of_use": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cadastro feito com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/loginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Campos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "password": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "obrigatório": {
+                                        "summary": "Campos obrigatórios",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "email": [
+                                                    "O campo email é obrigatório."
+                                                ],
+                                                "password": [
+                                                    "O campo senha é obrigatório."
+                                                ],
+                                                "terms_of_use": [
+                                                    "O campo termos de uso é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "comfirmação": {
+                                        "summary": "Campos de confirmação / Regras inválidas",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "email": [
+                                                    "O campo email deve ser um endereço de e-mail válido.",
+                                                    "O campo email de confirmação não confere."
+                                                ],
+                                                "password": [
+                                                    "O campo senha de confirmação não confere.",
+                                                    "O campo senha deve ter pelo menos 8 caracteres.",
+                                                    "O campo senha deve conter pelo menos uma letra."
+                                                ],
+                                                "terms_of_use": [
+                                                    "É obrigatório o aceite dos Termos de uso"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/app/terms-of-use": {
+            "get": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Obter Termos de uso",
+                "description": "Retorna o texto do Termos de uso",
+                "operationId": "b86eac24d1b18a41dcce3ac5e3f8ea08",
+                "responses": {
+                    "200": {
+                        "description": "Termos de uso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "terms_of_use": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "terms_of_use": "Termos de uso do aplicativo\n                                              Última modificação: 10/02/2022\n                                              Bem-vindo ao Trouw\n                                              Agradecemos por usar nossos produtos e serviços!\n                                              Continua..."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "loginResponse": {
+                "properties": {
+                    "success": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "properties": {
+                            "access_token": {
+                                "type": "string"
+                            },
+                            "token_type": {
+                                "type": "string"
+                            },
+                            "expires_in": {
+                                "type": "string",
+                                "format": "date"
+                            },
+                            "user": {
+                                "$ref": "#/components/schemas/user"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "success": "true",
+                    "data": {
+                        "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC90cm91dy1hcHBcL2FwcFwvYXV0aFwvbG9naW4iLCJpYXQiOjE2NDQzMjYwODksImV4cCI6MTY0NDMyOTY4OSwibmJmIjoxNjQ0MzI2MDg5LCJqdGkiOiJDeENTS0x6cGRLQ3ZUc2ZQIiwic3ViIjoxOTUsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.D8i4qR2vgW9G-lz-ej1swDUToFgU4AnKHEFY_2hWRGA",
+                        "token_type": "bearer",
+                        "expires_in": 3600,
+                        "user": {
+                            "id": 195,
+                            "uuid": "d83810de-4d4a-4306-85ed-c2e761fc998a",
+                            "email": "teste2@gmail.com",
+                            "email_verified_at": null,
+                            "created_at": "2022-02-08T13:09:57.000000Z",
+                            "updated_at": "2022-02-08T13:09:57.000000Z"
+                        }
+                    }
+                }
+            },
+            "profileResponse": {
+                "properties": {
+                    "success": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "properties": {
+                            "first_name": {
+                                "type": "string"
+                            },
+                            "last_name": {
+                                "type": "string"
+                            },
+                            "cpf": {
+                                "type": "string"
+                            },
+                            "uuid": {
+                                "type": "string"
+                            },
+                            "updated_at": {
+                                "type": "string",
+                                "format": "date"
+                            },
+                            "created_at": {
+                                "type": "string",
+                                "format": "date"
+                            },
+                            "id": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object",
+                "example": {
+                    "success": "true",
+                    "data": {
+                        "first_name": "Olávo",
+                        "last_name": "Sales",
+                        "cpf": "61906713065",
+                        "uuid": "250c9e0e-65df-4658-ad08-4cfe6d8abbf9",
+                        "updated_at": "2022-02-10T17:09:56.000000Z",
+                        "created_at": "2022-02-10T17:09:56.000000Z",
+                        "id": 2
+                    }
+                }
+            },
+            "user": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "uuid": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "email_verified_at": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "forbidden": {
+                "description": "Token de autorização não encontrado / Token expirado",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "examples": {
+                            "Token de autorização não encontrado": {
+                                "summary": "Token de autorização não encontrado",
+                                "value": {
+                                    "success": "false",
+                                    "data": {
+                                        "message": "Token de autorização não encontrado"
+                                    }
+                                }
+                            },
+                            "Token expirado": {
+                                "summary": "Token expirado",
+                                "value": {
+                                    "success": "false",
+                                    "data": {
+                                        "message": "Token expirado"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "unauthorized": {
+                "description": "Token inválido",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "example": {
+                            "success": "false",
+                            "data": {
+                                "message": "Token inválido"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}
