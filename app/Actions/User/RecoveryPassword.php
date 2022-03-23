@@ -291,7 +291,7 @@ class RecoveryPassword extends Controller
                 "data" => [
                     "message" => "Token para alteração de senha inválido."
                 ]
-            ],422);
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         if(Carbon::now()->greaterThan($verifyToken->expires_at)) {
@@ -300,7 +300,7 @@ class RecoveryPassword extends Controller
                 "data" => [
                     "message" => "Token para alteração de senha expirado."
                 ]
-            ], 403);
+            ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         $newPassword = Hash::make($request->all()['password']);
