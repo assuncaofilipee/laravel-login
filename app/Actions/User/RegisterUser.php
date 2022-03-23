@@ -5,6 +5,7 @@ namespace App\Actions\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
 use App\Repositories\UserRepository;
+use Illuminate\Http\JsonResponse;
 
 class RegisterUser extends Controller
 {
@@ -98,6 +99,6 @@ class RegisterUser extends Controller
         return response()->json([
             'success' => 'true',
             'data' => $user
-        ], 201);
+        ], JsonResponse::HTTP_CREATED);
     }
 }

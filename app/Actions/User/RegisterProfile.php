@@ -5,6 +5,8 @@ namespace App\Actions\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterProfileRequest;
 use App\Repositories\ProfileRepository;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class RegisterProfile extends Controller
 {
@@ -105,6 +107,6 @@ class RegisterProfile extends Controller
         return response()->json([
             'success' => 'true',
             'data' => $profile
-        ], 201);
+        ], JsonResponse::HTTP_CREATED);
     }
 }

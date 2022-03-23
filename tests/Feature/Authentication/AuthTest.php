@@ -4,6 +4,7 @@ namespace Tests\Feature\Authentication;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -77,7 +78,7 @@ class AuthTest extends TestCase
                 "email" => ["Email não cadastrado"]
             ]
          ]);
-        $response->assertStatus(422);
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
     }
 
        /**
@@ -96,7 +97,7 @@ class AuthTest extends TestCase
                 "message" => "Senha incorreta, favor revisar."
             ]
          ]);
-        $response->assertStatus(401);
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -116,7 +117,7 @@ class AuthTest extends TestCase
                   ]
             ]
         ]);
-        $response->assertStatus(422);
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**

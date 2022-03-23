@@ -4,6 +4,7 @@ namespace Tests\Feature\RegisterProfile;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -81,7 +82,7 @@ class RegisterProfileTest extends TestCase
                   ]
                 ]
               ]);
-        $response->assertStatus(422);
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
     }
 
         /**
@@ -107,7 +108,7 @@ class RegisterProfileTest extends TestCase
             ]
           ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     /**
@@ -124,6 +125,6 @@ class RegisterProfileTest extends TestCase
             ]
           ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED);
     }
 }

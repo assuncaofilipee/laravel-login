@@ -5,6 +5,7 @@ namespace Tests\Feature\RecoveryPassword;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use SebastianBergmann\PeekAndPoke\Proxy;
@@ -94,7 +95,7 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/validate-password-token', ['password_token' => 'abcdf'])
-        ->assertStatus(422)
+        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJson(
             [
                 "success" => "false",
@@ -114,7 +115,7 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/validate-password-token', ['password_token' => 'abcdefg'])
-        ->assertStatus(422)
+        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJson(
             [
                 "success" => "false",
@@ -162,7 +163,7 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/new-password')
-        ->assertStatus(422)
+        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJson([
             "success" => "false",
             "data" => [
@@ -184,7 +185,7 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/new-password',['password' => '123', 'password_confirmation' => '123'])
-        ->assertStatus(422)
+        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJson([
             "success" => "false",
             "data" => [
@@ -204,7 +205,7 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/new-password',['password_token' => 'abcd14','password' => '1234abcd', 'password_confirmation' => '1234abcd'])
-        ->assertStatus(422)
+        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         ->assertJson([
             "success" => "false",
             "data" => [

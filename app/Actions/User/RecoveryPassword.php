@@ -9,6 +9,7 @@ use App\Http\Requests\PasswordTokenValidateRequest;
 use App\Models\User;
 use App\Repositories\PasswordResetRepository;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 class RecoveryPassword extends Controller
@@ -172,7 +173,7 @@ class RecoveryPassword extends Controller
                 "data" => [
                     "message" => "Código de verificação inválido."
                 ]
-            ],422);
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         if(Carbon::now()->greaterThan($resetToken->expires_at)) {
@@ -181,7 +182,7 @@ class RecoveryPassword extends Controller
                 "data" => [
                     "message" => "Código de verificação expirado."
                 ]
-            ], 403);
+            ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         $newToken = $this->repository->getResetIdentifierCode($resetToken);

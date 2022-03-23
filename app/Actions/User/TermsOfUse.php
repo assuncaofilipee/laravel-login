@@ -45,6 +45,6 @@ class TermsOfUse extends Controller
             'data' => [
                 'terms_of_use' => File::get(storage_path('termsOfUse.txt'))
             ]
-        ], 200);
+        ]);
     }
 }

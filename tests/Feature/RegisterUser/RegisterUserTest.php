@@ -45,7 +45,7 @@ class RegisterUserTest extends TestCase
                      ]
                    ]
              ]);
-        $response->assertStatus(422);
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
     }
 
         /**
@@ -73,6 +73,6 @@ class RegisterUserTest extends TestCase
                      ]
                    ]
              ]);
-        $response->assertStatus(422);
+        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
     }
 }
