@@ -300,7 +300,7 @@ class RecoveryPassword extends Controller
                 "data" => [
                     "message" => "Token para alteração de senha expirado."
                 ]
-            ], JsonResponse::HTTP_UNAUTHORIZED);
+            ], JsonResponse::HTTP_FORBIDDEN);
         }
 
         $newPassword = Hash::make($request->all()['password']);

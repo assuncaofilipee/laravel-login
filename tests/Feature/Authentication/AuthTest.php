@@ -144,7 +144,7 @@ class AuthTest extends TestCase
                 "message" => "Token de autorização não encontrado"
             ]
          ]);
-        $response->assertStatus(403);
+        $response->assertStatus(JsonResponse::HTTP_FORBIDDEN);
     }
 
     /**
