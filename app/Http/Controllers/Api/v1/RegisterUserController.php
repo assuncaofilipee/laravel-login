@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Actions\User;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 
-class RegisterUser extends Controller
+class RegisterUserController extends Controller
 {
     protected $repository;
 

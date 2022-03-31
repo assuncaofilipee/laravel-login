@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Actions\User;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 
-class TermsOfUse extends Controller
+class TermsOfUseController extends Controller
 {
    /**
     *

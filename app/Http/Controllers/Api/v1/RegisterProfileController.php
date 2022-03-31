@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Actions\User;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterProfileRequest;
 use App\Repositories\ProfileRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegisterProfile extends Controller
+class RegisterProfileController extends Controller
 {
     protected $repository;
 

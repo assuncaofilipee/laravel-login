@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Actions\User;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 
-class Authentication extends Controller
+class AuthenticationController extends Controller
 {
     /**
      * @OA\Post(
