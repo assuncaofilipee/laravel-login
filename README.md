@@ -8,7 +8,6 @@ API Backend responsável por controle de acesso (Login) e troca de senha.
 
  - [Laravel](https://laravel.com)
  - [Mysql](https://www.mysql.com)
- - [Redis](https://redis.io/)
 
 ## Clonar Repositório
 
