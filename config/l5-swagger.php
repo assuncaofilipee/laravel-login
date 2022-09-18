@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'TROUW',
+                'title' => 'API controle de acesso',
             ],
 
             'routes' => [

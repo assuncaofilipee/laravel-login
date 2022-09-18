@@ -1,5 +1,7 @@
 <?php
 
+namespace App\swagger\responses;
+
 /**
 * @OA\Response(
 *      response="unauthorized",

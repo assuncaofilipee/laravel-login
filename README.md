@@ -1,50 +1,81 @@
-# API Laravel
+# API controle de acesso Laravel
 
-## Sobre
+<p align="center">
+  <img src="public/img/access-control.png">
+</p>
 
-API Backend responsável por controle de acesso (Login) e troca de senha.
+:small_blue_diamond: [Descrição do projeto](#descrição-do-projeto)
 
-## Tecnologias
+:small_blue_diamond: [Funcionalidades](#funcionalidades)
 
- - [Laravel](https://laravel.com)
- - [Mysql](https://www.mysql.com)
+:small_blue_diamond: [Pré-requisitos](#pré-requisitos)
 
-## Clonar Repositório
+:small_blue_diamond: [Como executar a aplicação](#como-executar-a-aplicação)
+
+# Descrição do projeto
+
+Projeto construído para comprovar conhecimentos nas tecnologias:
+
+- Framework PHP (Laravel)
+- Banco de dados (Mysql)
+- Infra (Docker)
+- Testes automatizados (PHPUnit)
+- Documentação (Swagger)
+
+# Funcionalidades
+
+- CRUD de usuário;
+- Login, refresh token e logout;
+- Recuperação de senha via email;
+
+# Pré-requisitos:
+
+Ter instalado em seu computador docker e docker compose.
+
+# Como executar a aplicação
+Faça o clone do projeto:
+```bash
+$ git clone https://github.com/filipeassuncao/laravel-access-control.git
+```
+Clone o .env:
+```bash
+cp .env.example .env
+```
+Escolha um servidor de email de sua preferencia e preencha as variaveis de ambiente no arquivo .env com suas credencais.
 
 ```bash
-    $ git clone https://github.com/filipeassuncao/laravel-login.git
+    MAIL_MAILER
+    MAIL_HOST
+    MAIL_PORT
+    MAIL_USERNAME
+    MAIL_PASSWORD
+    MAIL_ENCRYPTION
+    MAIL_FROM_ADDRESS
 ```
-## Configuração
-
-### Dependências:
-
-Ao clonar o repositório, certifique-se de possuir o docker e docker-compose instalados e configurados em sua máquina local.
-
-### Configuração de variáveis de ambientes (.env)
-
-Execute o comando abaixo para criar o arquivo de configuração .env:
+ Na primeira vez que for iniciar o container, na pasta raiz do projeto, rode o comando que irá realizar a configuração do ambiente da aplicação:
 
 ```bash
-    $ cp .env.example .env
+    $ docker-compose up --build -d
 ```
 
-* No arquivo .env, defina as senhas do usuário padrão mysql e usuário root:
-    * DB_PASSWORD= senha usuário mysql
-    * DB_PASSWORD_ROOT= senha usuário root
+Pronto, caso queira acessar o container para rodar os testes automatizados siga os comandos:
 
-### Executando:
-
-No arquivo Makefile, na pasta raiz do projeto, se encontram diversos comandos reduzidos para facilitar a execução dos mesmos.
-
-Na primeira vez que for iniciar o container, rode o comando que irá realizar a configuração do ambiente onde será executado a aplicação:
+docker exec -it trouw-app /bin/bash
 
 
-```bash
-    $ make buildd
-```
 
-Em sua máquina, a url default será http://localhost:8080/
+---
 
-Para iniciar o contaier novamente, caso esteja inativo, basta rodar o comando make upd
+# Acesso
 
+1 - Acesse no seu browser http://localhost:6001
 
+#  Documentação via swagger
+
+2 - Acesse no seu browser http://localhost:6001/api/documentation
+
+# Licença 
+
+Licença (MIT)
+
+Copyright :copyright: 2022 - Cakes API

@@ -10,11 +10,10 @@ use Illuminate\Routing\Controller as BaseController;
     /**
     * @OA\Info(
     *      version="1.0.0",
-    *      title="Documentação API Trouw",
-    *      description="Documentação desenvolvida para direcionar o desenvolvimento da aplicação Trouw mobile, nela se encontram todos os endpoints
-         necessários para o correto funcionamento da aplicação.",
+    *      title="Documentação API controle de acesso Laravel",
+    *      description="Documentação com todos os endpoints necessários para a correta utilização da aplicação.",
     *      @OA\Contact(
-    *          email="contato@fabrika.com"
+    *          email="assuncaofilipe97@gmail.com"
     *      ),
     * )
     *

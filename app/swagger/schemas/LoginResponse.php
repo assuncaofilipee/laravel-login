@@ -1,4 +1,6 @@
 <?php
+
+namespace App\swagger\schemas;
 /**
     * @OA\Schema(
     *    schema="loginResponse",

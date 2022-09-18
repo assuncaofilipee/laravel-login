@@ -17,7 +17,7 @@ build:
 buildd:
 	docker-compose up --build -d
 sh:
-	docker exec -it trouw-app /bin/bash
+	docker exec -it laravel-login_app /bin/bash
 db:
 	docker exec -it trouw-mysql bash -c "mysql -u ${DB_USERNAME} -p'${DB_PASSWORD}' ${DB_DATABASE}"
 migrate:

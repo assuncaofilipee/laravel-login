@@ -1,10 +1,10 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Documentação API Trouw",
-        "description": "Documentação desenvolvida para direcionar o desenvolvimento da aplicação Trouw mobile, nela se encontram todos os endpoints\n         necessários para o correto funcionamento da aplicação.",
+        "title": "Documentação API controle de acesso Laravel",
+        "description": "Documentação com todos os endpoints necessários para a correta utilização da aplicação.",
         "contact": {
-            "email": "contato@fabrika.com"
+            "email": "assuncaofilipe97@gmail.com"
         },
         "version": "1.0.0"
     },
@@ -22,7 +22,7 @@
                 ],
                 "summary": "Autenticar usuário",
                 "description": "Retorna usuário logado",
-                "operationId": "3557031b690a5fffa06f6a746beebb15",
+                "operationId": "342ade8140987f5ceae4440337c216fe",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -156,7 +156,7 @@
                 ],
                 "summary": "Desconectar usuário",
                 "description": "Desconecta um usuário conectado",
-                "operationId": "b4943fdd05165cd13f7ca5ffb1cd7a44",
+                "operationId": "45468c7cb12267053791dbe5825d037e",
                 "responses": {
                     "200": {
                         "description": "Usuário Desconectado",
@@ -208,7 +208,7 @@
                 ],
                 "summary": "Obter novo token",
                 "description": "Retorna informações do usuário e um novo token",
-                "operationId": "d61bf4ca518293a10d412a4b15e30dbc",
+                "operationId": "6d6cf921991439f285f6f40acf213c9d",
                 "responses": {
                     "200": {
                         "description": "Token atualizado",
@@ -241,7 +241,7 @@
                 ],
                 "summary": "Obter dados do usuário conectado",
                 "description": "Retorna informações do usuário conectado",
-                "operationId": "65bc155b77c64a06e61ed54ed5458ce9",
+                "operationId": "26cc16fd7bf378902db25ce59c26e740",
                 "responses": {
                     "200": {
                         "description": "Dados do usuário conectado",
@@ -297,7 +297,7 @@
                 ],
                 "summary": "Recuperar senha",
                 "description": "Envia um código de recuperação ao email informado.",
-                "operationId": "8ab089a3890141b41ae46576926b351c",
+                "operationId": "6e772c6a1b43cd8d8af73e05bcac449f",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -390,7 +390,7 @@
                 ],
                 "summary": "Validar código de verificação",
                 "description": "Válida código de verificação enviado ao email.",
-                "operationId": "92b050fe877d16500644c7ab0229441e",
+                "operationId": "66aabca5a25c369e7588f20c5b336ffa",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -526,7 +526,7 @@
                 ],
                 "summary": "Nova senha",
                 "description": "Criação de nova senha.",
-                "operationId": "7bb5bb1b00ed0607f37ba9f41b4e9476",
+                "operationId": "4816c7f37cbfaf004c920ca91c530a07",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -670,7 +670,7 @@
                 ],
                 "summary": "Cadastro de dados pessoais do usuário da API",
                 "description": "Cadastra os dados pessoais do usuário",
-                "operationId": "269666ac597baa6da300b7e89085fb2d",
+                "operationId": "1d1ff580c4b80d2bedeee33571c8a0db",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -807,7 +807,7 @@
                 ],
                 "summary": "Cadastro de usuário para utilização da API",
                 "description": "Retorna as informações do usuário cadastrado",
-                "operationId": "9b022d4c003f3c09691db23d553d559c",
+                "operationId": "9a99d71e5fa95638abe951e0779dd024",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -918,47 +918,6 @@
                                                 ]
                                             }
                                         }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/app/terms-of-use": {
-            "get": {
-                "tags": [
-                    "Acesso"
-                ],
-                "summary": "Obter Termos de uso",
-                "description": "Retorna o texto do Termos de uso",
-                "operationId": "b86eac24d1b18a41dcce3ac5e3f8ea08",
-                "responses": {
-                    "200": {
-                        "description": "Termos de uso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "string"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "terms_of_use": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "example": {
-                                    "success": "true",
-                                    "data": {
-                                        "terms_of_use": "Termos de uso do aplicativo\n                                              Última modificação: 10/02/2022\n                                              Bem-vindo ao Trouw\n                                              Agradecemos por usar nossos produtos e serviços!\n                                              Continua..."
                                     }
                                 }
                             }
@@ -1169,8 +1128,5 @@
                 "scheme": "bearer"
             }
         }
-    },
-    "security": [
-        []
-    ]
+    }
 }
