@@ -58,12 +58,6 @@ Escolha um servidor de email de sua preferencia e preencha as variaveis de ambie
     $ docker-compose up --build -d
 ```
 
-Pronto, caso queira acessar o container para rodar os testes automatizados siga os comandos:
-
-docker exec -it trouw-app /bin/bash
-
-
-
 ---
 
 # Acesso
