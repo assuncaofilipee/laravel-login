@@ -1,4 +1,4 @@
-# API controle de acesso Laravel
+# API controle de acesso
 
 <p align="center">
   <img src="public/img/access-control.png">
@@ -72,4 +72,4 @@ Escolha um servidor de email de sua preferencia e preencha as variaveis de ambie
 
 Licença (MIT)
 
-Copyright :copyright: 2022 - Cakes API
+Copyright :copyright: 2022 - API controle de acesso
