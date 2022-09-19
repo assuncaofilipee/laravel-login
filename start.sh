@@ -1,6 +1,7 @@
 #!/bin/sh
 sleep 15s
 
+sudo composer insall
 
 sudo php artisan horizon:publish
 
