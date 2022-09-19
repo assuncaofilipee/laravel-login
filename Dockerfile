@@ -15,12 +15,6 @@ USER ambientum
 RUN sudo chmod -R 777 /app/storage
 RUN sudo rm -rf /var/cache/apk*
 
-RUN sudo touch crontab.tmp
-RUN sudo chmod 777 crontab.tmp
-RUN sudo echo '* * * * cd /app && php artisan schedule:run >> /dev/null 2>&1' > crontab.tmp
-RUN sudo crontab crontab.tmp
-RUN sudo rm -rf crontab.tmp
-
 EXPOSE 80 443
 
 

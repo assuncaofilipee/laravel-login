@@ -1,22 +1,17 @@
 #!/bin/sh
 sleep 15s
 
-/usr/sbin/crond
 
-composer install
+sudo php artisan horizon:publish
 
-php artisan horizon:publish
+sudo php artisan config:cache
 
-php artisan config:cache
+sudo php artisan cache:clear
 
-php artisan cache:clear
+sudo composer dumpautoload
 
-composer dumpautoload
+sudo php artisan l5-swagger:generate
 
-php artisan l5-swagger:generate
+sudo php artisan migrate
 
-php artisan migrate
-
-php artisan serve --host=0.0.0.0 --port=80 & sudo supervisord -c /etc/supervisord.conf
-
-
+sudo php artisan serve --host=0.0.0.0 --port=80 & sudo supervisord -c /etc/supervisord.conf
