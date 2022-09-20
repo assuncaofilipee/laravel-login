@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\RegisterProfile;
+namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -117,7 +117,7 @@ class RegisterProfileTest extends TestCase
     public function shoudNotRegisterProfilewithInvalidToken()
     {
         $response = $this->post('/app/user/profile');
-
+        
         $response->assertJson([
             "success" => "false",
             "data" => [
@@ -125,6 +125,6 @@ class RegisterProfileTest extends TestCase
             ]
           ]);
 
-        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED);
+        $response->assertStatus(JsonResponse::HTTP_FORBIDDEN);
     }
 }

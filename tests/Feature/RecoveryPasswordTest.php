@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\RecoveryPassword;
+namespace Tests\Feature;
 
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;

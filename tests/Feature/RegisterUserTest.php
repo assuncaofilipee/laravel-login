@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature\RegisterUser;
+namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\JsonResponse;
 use Tests\TestCase;
 
 class RegisterUserTest extends TestCase

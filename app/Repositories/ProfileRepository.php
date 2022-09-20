@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Profile;
+
 class ProfileRepository
 {
     private $profile;

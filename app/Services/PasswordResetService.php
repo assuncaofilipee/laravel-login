@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Services;
 
 use App\Models\PasswordReset;
 use App\Notifications\PasswordResetNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
-class PasswordResetRepository
+class PasswordResetService
 {
     private $passwordReset;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Authentication;
+namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -91,13 +91,14 @@ class AuthTest extends TestCase
             'email' => $this->user->email,
             'password' => '123456zz'
         ]);
+
         $response->assertJson( [
             "success" => "false",
             "data" => [
                 "message" => "Senha incorreta, favor revisar."
             ]
          ]);
-        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED);
     }
 
     /**

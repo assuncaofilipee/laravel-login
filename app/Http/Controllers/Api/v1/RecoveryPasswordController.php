@@ -7,18 +7,18 @@ use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\PasswordResetRequest;
 use App\Http\Requests\PasswordTokenValidateRequest;
 use App\Models\User;
-use App\Repositories\PasswordResetRepository;
+use App\Services\PasswordResetService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 class RecoveryPasswordController extends Controller
 {
-    private $repository;
+    private $service;
 
-    public function __construct(PasswordResetRepository $repository)
+    public function __construct(PasswordResetService $service)
     {
-        $this->repository = $repository;
+        $this->service = $service;
     }
 
     /**
@@ -76,7 +76,7 @@ class RecoveryPasswordController extends Controller
     {
         $user = User::where('email', $request->only('email'))->first();
 
-        $this->repository->sendPasswordResentLink($user);
+        $this->service->sendPasswordResentLink($user);
         return response()->json([
             "success" => "true",
             "data" => [
@@ -165,7 +165,7 @@ class RecoveryPasswordController extends Controller
      */
     public function validatePasswordResetToken(PasswordTokenValidateRequest $request)
     {
-        $resetToken = $this->repository->getResetToken($request->get('password_token'));
+        $resetToken = $this->service->getResetToken($request->get('password_token'));
 
         if(empty($resetToken)) {
             return response()->json([
@@ -185,11 +185,11 @@ class RecoveryPasswordController extends Controller
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        $newToken = $this->repository->getResetIdentifierCode($resetToken);
+        $newToken = $this->service->getResetIdentifierCode($resetToken);
 
         if($newToken) {
 
-            $this->repository->expiresTokenNow($resetToken);
+            $this->service->expiresTokenNow($resetToken);
 
             return response()->json([
                 "success" => "true",
@@ -283,7 +283,7 @@ class RecoveryPasswordController extends Controller
      */
     public function setNewAccountPassword(PasswordResetRequest $request)
     {
-        $verifyToken = $this->repository->getResetToken($request->get('password_token'));
+        $verifyToken = $this->service->getResetToken($request->get('password_token'));
 
         if(empty($verifyToken)) {
             return response()->json([
@@ -308,7 +308,7 @@ class RecoveryPasswordController extends Controller
 
         if($verifyToken->user->save()) {
 
-            $this->repository->expiresTokenNow($verifyToken);
+            $this->service->expiresTokenNow($verifyToken);
 
             return response()->json([
                 "success" => "true",
