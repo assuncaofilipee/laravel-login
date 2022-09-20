@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends Controller
@@ -90,7 +91,7 @@ class AuthenticationController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['success' => 'false','data' => ['message' => 'Senha incorreta, favor revisar.']], 401);
+            return response()->json(['success' => 'false','data' => ['message' => 'Senha incorreta, favor revisar.']], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         return $this->createNewToken($token);

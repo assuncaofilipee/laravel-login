@@ -35,10 +35,11 @@ class ProfileRepositoryTest extends TestCase
         $profile = new Profile();
         $profileRepository = new ProfileRepository($profile);
 
-        $profile = $profileRepository->create(['first_name' => 'Olávo',
-                                    'last_name' => 'Silva',
-                                    'cpf' => '09367899050'
-                                    ]);
+        $profile = $profileRepository->create([
+            'first_name' => 'Olávo',
+            'last_name' => 'Silva',
+            'cpf' => '09367899050'
+        ]);
 
         $this->assertInstanceOf(Profile::class, $profile);
     }

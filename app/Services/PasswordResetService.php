@@ -16,13 +16,11 @@ class PasswordResetService
         $this->passwordReset = $passwordReset;
     }
 
-    // Geração de um código de verificação de 6 dígitos
     public function getResetCode()
     {
         return Str::random(6);
     }
 
-    // Envia um código de verificação para o usuário
     public function sendPasswordResentLink($user)
     {
         $token = $this->getResetCode();
@@ -36,7 +34,6 @@ class PasswordResetService
         ]);
     }
 
-    // Cria um novo token a partir do antigo
     public function getResetIdentifierCode($resetToken)
     {
         $token = $this->getResetCode();
@@ -51,7 +48,6 @@ class PasswordResetService
         return $token;
     }
 
-    // Obtém token do código de verificação enviado ao usuário
     public function getResetToken($passwordToken)
     {
         return  $this->passwordReset::where([
@@ -59,7 +55,6 @@ class PasswordResetService
         ])->first();
     }
 
-    // Força a expiração do token
     public function expiresTokenNow($resetToken)
     {
         return $resetToken->update([
