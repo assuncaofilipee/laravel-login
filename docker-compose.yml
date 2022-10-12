@@ -7,8 +7,8 @@ services:
   app:
     build:
       args:
-        user: filipesantos
-        uid: 1001
+        user: ${USER}
+        uid: ${UID}
       context: ./
       dockerfile: Dockerfile
     image: travellist
@@ -55,7 +55,7 @@ services:
     depends_on:
       - app
       - db
-      
+
 networks:
   travellist:
     driver: bridge
