@@ -18,4 +18,4 @@ docker-compose exec app php artisan migrate
 
 docker-compose exec app php artisan db:seed
 
-docker-compose exec app sudo supervisord -c /etc/supervisord.conf & docker-compose exec app php artisan serve --host=0.0.0.0 --port=6001
+docker-compose exec app supervisord -c /etc/supervisord.conf & docker-compose exec app php artisan serve --host=0.0.0.0 --port=6001
