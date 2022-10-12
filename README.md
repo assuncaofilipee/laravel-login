@@ -37,6 +37,10 @@ Faça o clone do projeto:
 ```bash
 $ git clone https://github.com/filipeassuncao/laravel-access-control.git
 ```
+Copie o arquivo .env.example para o .env
+```bash
+cp .env.example .env
+```
 
 Execute os dois comandos abaixo (em ambiente linux) para resgatar os valores de usuario e uid utilizados na configuração do cotainer do docker.
 
