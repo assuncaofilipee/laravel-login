@@ -1,22 +1,33 @@
-FROM ambientum/php:8.0-nginx
+FROM php:8.0.2-fpm
 
-WORKDIR /app
+ARG user
+ARG uid
 
-COPY --chown=ambientum:ambientum . /app
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
+    unzip
 
-USER root
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN sudo apk update && apk add --no-cache supervisor
-COPY supervisord.conf /etc/supervisord.conf
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-USER ambientum
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN sudo chmod -R 777 /app/storage
-RUN sudo rm -rf /var/cache/apk*
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
 
-EXPOSE 80 443
+# Set working directory
+WORKDIR /var/www
 
-
-
-
+USER $user

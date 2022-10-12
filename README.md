@@ -37,25 +37,32 @@ Faça o clone do projeto:
 ```bash
 $ git clone https://github.com/filipeassuncao/laravel-access-control.git
 ```
-Clone o .env:
+
+Execute os dois comandos abaixo (em ambiente linux) para resgatar os valores de usuario e uid utilizados na configuração do cotainer do docker.
+
+Subistitua o valor da variável USER no arquivo .env pelo resultado do comando abaixo:
 ```bash
-cp .env.example .env
+whoami
 ```
-Escolha um servidor de email de sua preferencia e preencha as variaveis de ambiente no arquivo .env com suas credencais.
+Subistitua o valor da variável UID no arquivo .env pelo resultado do comando abaixo:
+```bash
+id -u
+```
+Escolha um servidor de email de sua preferência e preencha as variaveis de ambiente no arquivo .env com suas credencais.
 
 ```bash
-    MAIL_MAILER
-    MAIL_HOST
-    MAIL_PORT
-    MAIL_USERNAME
-    MAIL_PASSWORD
-    MAIL_ENCRYPTION
-    MAIL_FROM_ADDRESS
+MAIL_MAILER
+MAIL_HOST
+MAIL_PORT
+MAIL_USERNAME
+MAIL_PASSWORD
+MAIL_ENCRYPTION
+MAIL_FROM_ADDRESS
 ```
  Na primeira vez que for iniciar o container, na pasta raiz do projeto, rode o comando que irá realizar a configuração do ambiente da aplicação:
 
 ```bash
-    $ docker-compose up --build -d
+sh build.sh
 ```
 
 ---

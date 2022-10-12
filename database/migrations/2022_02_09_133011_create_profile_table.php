@@ -19,7 +19,7 @@ class CreateProfileTable extends Migration
             $table->string('first_name',50);
             $table->string('last_name', 100);
             $table->string('cpf',11);
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,6 +32,9 @@ class CreateProfileTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('profile');
+        Schema::table('profiles', function (Blueprint $table) {
+            $table->dropForeign('profiles_user_id_foreign');
+        });
+        Schema::dropIfExists('profiles');
     }
 }
