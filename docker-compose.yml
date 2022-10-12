@@ -55,6 +55,7 @@ services:
     depends_on:
       - app
       - db
+      
 networks:
   travellist:
     driver: bridge

@@ -4,11 +4,18 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Services\AuthenticationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends Controller
 {
+    private AuthenticationService $service;
+
+    public function __construct(AuthenticationService $service)
+    {
+        $this->service = $service;
+    }
     /**
      * @OA\Post(
      *   tags={"Acesso"},
@@ -94,7 +101,7 @@ class AuthenticationController extends Controller
             return response()->json(['success' => 'false','data' => ['message' => 'Senha incorreta, favor revisar.']], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        return $this->createNewToken($token);
+        return $this->service->createNewToken($token);
     }
 
     /**
@@ -165,7 +172,7 @@ class AuthenticationController extends Controller
      */
     public function refresh()
     {
-        return $this->createNewToken(auth::refresh());
+        return $this->service->createNewToken(auth::refresh());
     }
     /**
      * @OA\Get(
@@ -208,23 +215,5 @@ class AuthenticationController extends Controller
     public function me()
     {
         return response()->json(["success" => "true", "data" =>auth()->user()]);
-    }
-    /**
-     * Obtém estrutura do token.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function createNewToken($token)
-    {
-        return response()->json(['success' => 'true',
-            'data' => [
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth::factory()->getTTL() * 60,
-            'user' => auth()->user()
-            ]
-        ]);
     }
 }
