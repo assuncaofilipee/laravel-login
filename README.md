@@ -40,11 +40,11 @@ $ git clone https://github.com/filipeassuncao/laravel-access-control.git
 
 Execute os dois comandos abaixo (em ambiente linux) para resgatar os valores de usuario e uid utilizados na configuração do cotainer do docker.
 
-Subistitua o valor da variável USER no arquivo .env pelo resultado do comando abaixo:
+Preencha o valor da variável USER no arquivo .env pelo resultado do comando abaixo:
 ```bash
 whoami
 ```
-Subistitua o valor da variável UID no arquivo .env pelo resultado do comando abaixo:
+Preencha o valor da variável UID no arquivo .env pelo resultado do comando abaixo:
 ```bash
 id -u
 ```
