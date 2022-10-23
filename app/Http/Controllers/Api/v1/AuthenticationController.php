@@ -93,7 +93,7 @@ class AuthenticationController extends Controller
      *    )
      * )
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only(['email', 'password']);
 
@@ -136,9 +136,8 @@ class AuthenticationController extends Controller
      * )
      * Loggout.
      *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logout(): JsonResponse
     {
         auth()->logout();
         return response()->json(
