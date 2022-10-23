@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterProfileRequest;
-use App\Repositories\ProfileRepository;
+use App\Services\ProfileService;
 use Illuminate\Http\JsonResponse;
 
-class RegisterProfileController extends Controller
+class ProfileController extends Controller
 {
-    protected $repository;
+    protected $service;
 
-    public function __construct(ProfileRepository $repository)
+    public function __construct(ProfileService $service)
     {
-        $this->repository = $repository;
+        $this->service = $service;
     }
 
     /**
@@ -99,9 +99,17 @@ class RegisterProfileController extends Controller
      *    @OA\Response(response=401,ref="#/components/responses/unauthorized")
      * )
      */
-    public function create(RegisterProfileRequest $request)
+    public function create(RegisterProfileRequest $request): JsonResponse
     {
-        $profile = $this->repository->create($request->all());
+        $profile = $this->service->create(
+            $request->only(
+                [
+                    'first_name',
+                    'last_name',
+                    'cpf'
+                ]
+            )
+        );
 
         return response()->json([
             'success' => 'true',

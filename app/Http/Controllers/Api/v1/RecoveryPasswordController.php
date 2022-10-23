@@ -72,7 +72,7 @@ class RecoveryPasswordController extends Controller
      *    ),
      * )
      */
-    public function sendPasswordResetToken(PasswordRecoveryRequest $request)
+    public function sendPasswordResetToken(PasswordRecoveryRequest $request): JsonResponse
     {
         $user = User::where('email', $request->only('email'))->first();
 
@@ -163,7 +163,7 @@ class RecoveryPasswordController extends Controller
      *    ),
      * )
      */
-    public function validatePasswordResetToken(PasswordTokenValidateRequest $request)
+    public function validatePasswordResetToken(PasswordTokenValidateRequest $request): JsonResponse
     {
         $resetToken = $this->service->getResetToken($request->get('password_token'));
 
@@ -281,7 +281,7 @@ class RecoveryPasswordController extends Controller
      *   ),
      * )
      */
-    public function setNewAccountPassword(PasswordResetRequest $request)
+    public function setNewAccountPassword(PasswordResetRequest $request): JsonResponse
     {
         $verifyToken = $this->service->getResetToken($request->get('password_token'));
 

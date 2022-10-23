@@ -12,22 +12,12 @@ use Illuminate\Validation\ValidationException;
 
 class RegisterUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'email' => 'required|string|email|confirmed|max:100|unique:users',
@@ -44,7 +34,7 @@ class RegisterUserRequest extends FormRequest
     }
 
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'terms_of_use.required' => 'O campo termos de uso é obrigatório.',
@@ -52,12 +42,12 @@ class RegisterUserRequest extends FormRequest
         ];
     }
 
-    public function expectsJson()
+    public function expectsJson(): bool
     {
         return true;
     }
 
-    public function failedValidation(Validator $validator)
+    public function failedValidation(Validator $validator): void
     {
         $errors = (new ValidationException($validator))->errors();
 
@@ -65,5 +55,4 @@ class RegisterUserRequest extends FormRequest
             response()->json(['success' => 'false', 'data' => $errors], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         );
     }
-
 }

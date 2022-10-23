@@ -8,12 +8,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class RegisterProfileTest extends TestCase
+class ProfileControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
     private $auth;
     private $user;
+    private $faker;
 
     public function setUp(): void
     {
@@ -31,6 +32,7 @@ class RegisterProfileTest extends TestCase
             'Authorization' => 'Bearer ' . $token
         ];
 
+        $this->faker = \Faker\Factory::create('pt_BR');
     }
     /**
      * @test
@@ -40,7 +42,7 @@ class RegisterProfileTest extends TestCase
         $response = $this->post('/app/user/profile', [
             "first_name" => "Olávo",
             "last_name" => "Sales",
-            "cpf" => "61906713065"
+            "cpf" => "70369233000"
         ], $this->auth);
 
         $response->assertJsonStructure([

@@ -10,41 +10,31 @@ use Illuminate\Validation\ValidationException;
 
 class PasswordRecoveryRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             "email" => "required|email|exists:users,email"
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             "email.exists" => "E-mail não encontrado, favor revisar!"
         ];
     }
 
-    public function expectsJson()
+    public function expectsJson(): bool
     {
         return true;
     }
 
-    public function failedValidation(Validator $validator)
+    public function failedValidation(Validator $validator): void
     {
         $errors = (new ValidationException($validator))->errors();
 

@@ -10,34 +10,31 @@ use Illuminate\Validation\ValidationException;
 
 class PasswordTokenValidateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             "password_token" => "required|string|max:6"
         ];
     }
 
-    public function expectsJson()
+    public function expectsJson(): bool
     {
         return true;
     }
 
-    public function failedValidation(Validator $validator)
+    public function messages()
+    {
+        return [
+            //
+        ];
+    }
+
+    public function failedValidation(Validator $validator): void
     {
         $errors = (new ValidationException($validator))->errors();
 

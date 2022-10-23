@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\PasswordReset;
+use App\Models\User;
 use App\Notifications\PasswordResetNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -16,12 +17,12 @@ class PasswordResetService
         $this->passwordReset = $passwordReset;
     }
 
-    public function getResetCode()
+    public function getResetCode(): string
     {
         return Str::random(6);
     }
 
-    public function sendPasswordResentLink($user)
+    public function sendPasswordResentLink(?User $user): PasswordReset
     {
         $token = $this->getResetCode();
         $signature = hash('md5', $token);
@@ -34,7 +35,7 @@ class PasswordResetService
         ]);
     }
 
-    public function getResetIdentifierCode($resetToken)
+    public function getResetIdentifierCode(PasswordReset $resetToken): string
     {
         $token = $this->getResetCode();
 
@@ -48,14 +49,14 @@ class PasswordResetService
         return $token;
     }
 
-    public function getResetToken($passwordToken)
+    public function getResetToken(string $passwordToken): ?PasswordReset
     {
         return  $this->passwordReset::where([
             ['token_signature', hash('md5', $passwordToken)],
         ])->first();
     }
 
-    public function expiresTokenNow($resetToken)
+    public function expiresTokenNow(PasswordReset $resetToken): bool
     {
         return $resetToken->update([
             "expires_at" => Carbon::now()

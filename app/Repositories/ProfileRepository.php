@@ -13,10 +13,11 @@ class ProfileRepository
         $this->profile = $profile;
     }
 
-    public function create($data)
+    public function create(array $data): Profile
     {
         return $this->profile::create(array_merge(
-            $data,['user_id' => auth()->user()->id]
+            $data,
+            ['user_id' => auth()->user()->id]
         ));
     }
 }

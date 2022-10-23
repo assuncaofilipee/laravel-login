@@ -167,10 +167,8 @@ class AuthenticationController extends Controller
      * )
      *
      * Refresh token.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh()
+    public function refresh(): JsonResponse
     {
         return $this->service->createNewToken(auth::refresh());
     }
@@ -207,12 +205,8 @@ class AuthenticationController extends Controller
      *    @OA\Response(response=401,ref="#/components/responses/unauthorized")
      *    ),
      * )
-     *
-     * Obtém usuário logado.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(): JsonResponse
     {
         return response()->json(["success" => "true", "data" =>auth()->user()]);
     }

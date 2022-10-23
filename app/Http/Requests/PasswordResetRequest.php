@@ -11,22 +11,12 @@ use Illuminate\Validation\ValidationException;
 
 class PasswordResetRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             "password_token" => "required|string|max:6",
@@ -41,6 +31,12 @@ class PasswordResetRequest extends FormRequest
         ];
     }
 
+
+    public function expectsJson(): bool
+    {
+        return true;
+    }
+
     public function messages()
     {
         return [
@@ -48,12 +44,7 @@ class PasswordResetRequest extends FormRequest
         ];
     }
 
-    public function expectsJson()
-    {
-        return true;
-    }
-
-    public function failedValidation(Validator $validator)
+    public function failedValidation(Validator $validator): void
     {
         $errors = (new ValidationException($validator))->errors();
 

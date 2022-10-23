@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
-use App\Repositories\UserRepository;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 
-class RegisterUserController extends Controller
+class UserController extends Controller
 {
-    protected $repository;
+    protected $service;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserService $service)
     {
-        $this->repository = $repository;
+        $this->service = $service;
     }
 
     /**
@@ -92,9 +92,19 @@ class RegisterUserController extends Controller
      *    )
      * )
      */
-    public function create(RegisterUserRequest $request)
+    public function create(RegisterUserRequest $request): JsonResponse
     {
-        $user = $this->repository->create($request->all());
+        $user = $this->service->create(
+            $request->only(
+                [
+                    'email',
+                    'email_confirmation',
+                    'password',
+                    'password_confirmation',
+                    'terms_of_use'
+                ]
+            )
+        );
 
         return response()->json([
             'success' => 'true',
