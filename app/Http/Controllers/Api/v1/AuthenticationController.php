@@ -97,11 +97,26 @@ class AuthenticationController extends Controller
     {
         $credentials = $request->only(['email', 'password']);
 
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['success' => 'false','data' => ['message' => 'Senha incorreta, favor revisar.']], JsonResponse::HTTP_UNAUTHORIZED);
+        $dataToken = $this->service->createNewToken($credentials);
+
+        if (empty($dataToken)) {
+            return response()->json(
+                [
+                    'success' => 'false',
+                    'data' => [
+                        'message' => 'Senha incorreta, favor revisar.'
+                    ]
+                ],
+                JsonResponse::HTTP_UNAUTHORIZED
+            );
         }
 
-        return $this->service->createNewToken($token);
+        return response()->json(
+            [
+                'success' => 'true',
+                'data' => $dataToken
+            ]
+        );
     }
 
     /**
@@ -139,12 +154,16 @@ class AuthenticationController extends Controller
      */
     public function logout(): JsonResponse
     {
-        auth()->logout();
+        $this->service->logout();
+
         return response()->json(
-            ['success' => 'true',
-            "data" => [
-                'message' => 'Usuário desconectado com sucesso']
-        ]);
+            [
+                'success' => 'true',
+                "data" => [
+                    'message' => 'Usuário desconectado com sucesso'
+                ]
+            ]
+        );
     }
     /**
      * @OA\Post(
@@ -169,7 +188,12 @@ class AuthenticationController extends Controller
      */
     public function refresh(): JsonResponse
     {
-        return $this->service->createNewToken(auth::refresh());
+        return response()->json(
+            [
+                'success' => 'true',
+                'data' => $this->service->refreshToken()
+            ]
+        );
     }
     /**
      * @OA\Get(
@@ -207,6 +231,11 @@ class AuthenticationController extends Controller
      */
     public function me(): JsonResponse
     {
-        return response()->json(["success" => "true", "data" =>auth()->user()]);
+        return response()->json(
+            [
+                "success" => "true",
+                "data" => $this->service->me()
+            ]
+        );
     }
 }

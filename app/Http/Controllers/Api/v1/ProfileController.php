@@ -111,9 +111,12 @@ class ProfileController extends Controller
             )
         );
 
-        return response()->json([
-            'success' => 'true',
-            'data' => $profile
-        ], JsonResponse::HTTP_CREATED);
+        return response()->json(
+            [
+                'success' => 'true',
+                'data' => $profile
+            ],
+            JsonResponse::HTTP_CREATED
+        );
     }
 }

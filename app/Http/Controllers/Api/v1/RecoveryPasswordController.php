@@ -74,9 +74,8 @@ class RecoveryPasswordController extends Controller
      */
     public function sendPasswordResetToken(PasswordRecoveryRequest $request): JsonResponse
     {
-        $user = User::where('email', $request->only('email'))->first();
+        $this->service->sendPasswordResentLink($request->get('email'));
 
-        $this->service->sendPasswordResentLink($user);
         return response()->json([
             "success" => "true",
             "data" => [

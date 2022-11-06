@@ -22,8 +22,10 @@ class PasswordResetService
         return Str::random(6);
     }
 
-    public function sendPasswordResentLink(?User $user): PasswordReset
+    public function sendPasswordResentLink(string $email): PasswordReset
     {
+        $user = User::where('email', $email)->first();
+
         $token = $this->getResetCode();
         $signature = hash('md5', $token);
         $user->notify(new PasswordResetNotification($token));
