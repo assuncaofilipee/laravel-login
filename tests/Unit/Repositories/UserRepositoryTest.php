@@ -14,7 +14,7 @@ class UserRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function create()
+    public function shouldCreateNewUser()
     {
         $user = new User();
         $userRepository = new UserRepository($user);

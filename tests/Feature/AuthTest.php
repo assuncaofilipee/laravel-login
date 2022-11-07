@@ -136,7 +136,7 @@ class AuthTest extends TestCase
     /**
      * @test
      */
-    public function shoudNotGetMe()
+    public function shoudNotGetMeData()
     {
         $response = $this->get('/app/me');
         $response->assertJson([

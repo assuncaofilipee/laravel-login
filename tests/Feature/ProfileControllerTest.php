@@ -10,123 +10,133 @@ use Tests\TestCase;
 
 class ProfileControllerTest extends TestCase
 {
-    use DatabaseTransactions;
+	use DatabaseTransactions;
 
-    private $auth;
-    private $user;
-    private $faker;
+	private $auth;
+	private $user;
+	private $faker;
 
-    public function setUp(): void
-    {
-        parent::setUp();
+	public function setUp(): void
+	{
+		parent::setUp();
 
-        $this->user = User::factory()->create([
-            'password' => Hash::make('123456ff')
-        ]);
-        $response = $this->post('/app/login', [
-            'email' => $this->user->email,
-            'password' => '123456ff'
-        ]);
-        $token = $response->json()['data']['access_token'];
-        $this->auth = [
-            'Authorization' => 'Bearer ' . $token
-        ];
+		$this->user = User::factory()->create([
+				'password' => Hash::make('123456ff')
+			]
+		);
 
-        $this->faker = \Faker\Factory::create('pt_BR');
-    }
-    /**
-     * @test
-     */
-    public function shouldRegisterProfile()
-    {
-        $response = $this->post('/app/user/profile', [
-            "first_name" => "Olávo",
-            "last_name" => "Sales",
-            "cpf" => "70369233000"
-        ], $this->auth);
+		$response = $this->post('/app/login', [
+				'email' => $this->user->email,
+				'password' => '123456ff'
+			]
+		);
 
-        $response->assertJsonStructure([
-            "success",
-            "data" => [
-                  "first_name",
-                  "last_name",
-                  "cpf",
-                  "user_id",
-                  "uuid",
-                  "updated_at",
-                  "created_at",
-                  "id"
-               ]
-         ]);
+		$token = $response->json()['data']['access_token'];
 
-        $response->assertSuccessful();
-    }
+		$this->auth = [
+			'Authorization' => 'Bearer ' . $token
+		];
 
-    /**
-     * @test
-     */
-    public function shoudNotRegisterProfile()
-    {
-        $response = $this->post('/app/user/profile', [], $this->auth);
+		$this->faker = \Faker\Factory::create('pt_BR');
+	}
+	/**
+	 * @test
+	 */
+	public function shouldRegisterProfile()
+	{
+		$response = $this->post('/app/user/profile', [
+			"first_name" => "Olávo",
+			"last_name" => "Sales",
+			"cpf" => "70369233000"
+		], $this->auth);
 
-        $response->assertJson(
-            [
-                "success" => "false",
-                "data" => [
-                  "first_name" => [
-                    0 => "O campo primeiro nome é obrigatório."
-                  ],
-                  "last_name" => [
-                    0 => "O campo sobrenome é obrigatório."
-                  ],
-                  "cpf" => [
-                    0 => "O campo cpf é obrigatório."
-                  ]
-                ]
-              ]);
-        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-    }
+		$response->assertJsonStructure([
+			"success",
+			"data" => [
+				"first_name",
+				"last_name",
+				"cpf",
+				"user_id",
+				"uuid",
+				"updated_at",
+				"created_at",
+				"id"
+			]
+		]);
 
-        /**
-     * @test
-     */
-    public function shoudNotRegisterUserAndReturnAllOthersErrors()
-    {
-        $response = $this->post('/app/user/profile',
-        ['first_name' => 'hakuna12', "last_name" => '123', 'cpf' => 00000], $this->auth);
+		$response->assertSuccessful();
+	}
 
-        $response->assertJson([
-            "success" => "false",
-            "data" => [
-              "first_name" => [
-                 "O campo primeiro nome só pode conter letras."
-              ],
-              "last_name" => [
-                 "O campo sobrenome só pode conter letras."
-              ],
-              "cpf" => [
-                 "CPF inválido"
-              ],
-            ]
-          ]);
+	/**
+	 * @test
+	 */
+	public function shoudNotRegisterProfile()
+	{
+		$response = $this->post('/app/user/profile', [], $this->auth);
 
-        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-    }
+		$response->assertJson(
+			[
+				"success" => "false",
+				"data" => [
+					"first_name" => [
+						0 => "O campo primeiro nome é obrigatório."
+					],
+					"last_name" => [
+						0 => "O campo sobrenome é obrigatório."
+					],
+					"cpf" => [
+						0 => "O campo cpf é obrigatório."
+					]
+				]
+			]
+		);
 
-    /**
-     * @test
-     */
-    public function shoudNotRegisterProfilewithInvalidToken()
-    {
-        $response = $this->post('/app/user/profile');
-        
-        $response->assertJson([
-            "success" => "false",
-            "data" => [
-              "message" => "Token de autorização não encontrado"
-            ]
-          ]);
+		$response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+	}
 
-        $response->assertStatus(JsonResponse::HTTP_FORBIDDEN);
-    }
+	/**
+	 * @test
+	 */
+	public function shoudNotRegisterUserAndReturnAllOthersErrors()
+	{
+		$response = $this->post('/app/user/profile', [
+				'first_name' => 'hakuna12', "last_name" => '123', 'cpf' => 00000
+			],
+			$this->auth
+		);
+
+		$response->assertJson([
+			"success" => "false",
+			"data" => [
+				"first_name" => [
+					"O campo primeiro nome só pode conter letras."
+				],
+				"last_name" => [
+					"O campo sobrenome só pode conter letras."
+				],
+				"cpf" => [
+					"CPF inválido"
+				],
+			]
+		]);
+
+		$response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+	}
+
+	/**
+	 * @test
+	 */
+	public function shoudNotRegisterProfilewithInvalidToken()
+	{
+		$response = $this->post('/app/user/profile');
+
+		$response->assertJson([
+			"success" => "false",
+			"data" => [
+				"message" => "Token de autorização não encontrado"
+			]
+		]);
+
+		$response->assertStatus(JsonResponse::HTTP_FORBIDDEN);
+	}
 }

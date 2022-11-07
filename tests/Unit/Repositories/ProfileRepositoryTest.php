@@ -30,7 +30,7 @@ class ProfileRepositoryTest extends TestCase
     /**
      * @test
      */
-    public function create()
+    public function ShouldCreateANewProfile()
     {
         $profile = new Profile();
         $profileRepository = new ProfileRepository($profile);

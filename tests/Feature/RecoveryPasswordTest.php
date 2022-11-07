@@ -28,9 +28,10 @@ class RecoveryPasswordTest extends TestCase
     {
         parent::setUp();
 
-        $this->user = User::factory()->create([
+        $this->user =  User::factory()->create([
             'password' => Hash::make('123456ff')
         ]);
+
         $response = $this->post('/app/login', [
             'email' => $this->user->email,
             'password' => '123456ff'
@@ -75,16 +76,18 @@ class RecoveryPasswordTest extends TestCase
 
         $this->post('/app/forgot-password', ['email' => $this->user->email])->assertSuccessful();
 
-        Notification::assertSentTo($this->user, PasswordResetNotification::class,
-        function($notification) {
-           $this->proxyNotification = new Proxy($notification);
-           return $notification !== null;
+        Notification::assertSentTo(
+            $this->user,
+            PasswordResetNotification::class,
+            function ($notification) {
+                $this->proxyNotification = new Proxy($notification);
+                return $notification !== null;
             }
         );
 
         $this->post('/app/validate-password-token', ['password_token' => $this->proxyNotification->password_token])
-        ->assertSuccessful()
-        ->assertJsonStructure(["success", "data"=> ["password_token"]]);
+            ->assertSuccessful()
+            ->assertJsonStructure(["success", "data" => ["password_token"]]);
     }
 
     /**
@@ -95,15 +98,15 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/validate-password-token', ['password_token' => 'abcdf'])
-        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        ->assertJson(
-            [
-                "success" => "false",
-                "data" => [
-                      "message" => "Código de verificação inválido."
-                   ]
-             ]
-        );
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson(
+                [
+                    "success" => "false",
+                    "data" => [
+                        "message" => "Código de verificação inválido."
+                    ]
+                ]
+            );
     }
 
 
@@ -115,17 +118,17 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/validate-password-token', ['password_token' => 'abcdefg'])
-        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        ->assertJson(
-            [
-                "success" => "false",
-                "data" => [
-                      "password_token" => [
-                         "O campo password token não pode ser superior a 6 caracteres."
-                      ]
-                   ]
-             ]
-        );
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson(
+                [
+                    "success" => "false",
+                    "data" => [
+                        "password_token" => [
+                            "O campo password token não pode ser superior a 6 caracteres."
+                        ]
+                    ]
+                ]
+            );
     }
 
     /**
@@ -137,22 +140,26 @@ class RecoveryPasswordTest extends TestCase
 
         $this->post('/app/forgot-password', ['email' => $this->user->email])->assertSuccessful();
 
-        Notification::assertSentTo($this->user, PasswordResetNotification::class,
-        function($notification) {
-           $this->proxyNotification = new Proxy($notification);
-           return $notification !== null;
+        Notification::assertSentTo(
+            $this->user,
+            PasswordResetNotification::class,
+            function ($notification) {
+                $this->proxyNotification = new Proxy($notification);
+                return $notification !== null;
             }
         );
 
-        $this->post('/app/new-password', ['password_token' => $this->proxyNotification->password_token,
-        'password' => 'abcd1234', 'password_confirmation' => 'abcd1234'])
-        ->assertSuccessful()
-        ->assertJson( [
-            "success" => "true",
-            "data" => [
-                  "message" => "Senha alterada com sucesso."
-               ]
-         ]);
+        $this->post('/app/new-password', [
+            'password_token' => $this->proxyNotification->password_token,
+            'password' => 'abcd1234', 'password_confirmation' => 'abcd1234'
+        ])
+            ->assertSuccessful()
+            ->assertJson([
+                "success" => "true",
+                "data" => [
+                    "message" => "Senha alterada com sucesso."
+                ]
+            ]);
     }
 
     /**
@@ -163,18 +170,18 @@ class RecoveryPasswordTest extends TestCase
         Notification::fake();
 
         $this->post('/app/new-password')
-        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        ->assertJson([
-            "success" => "false",
-            "data" => [
-                  "password_token" => [
-                     "O campo password token é obrigatório."
-                  ],
-                  "password" => [
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson([
+                "success" => "false",
+                "data" => [
+                    "password_token" => [
+                        "O campo password token é obrigatório."
+                    ],
+                    "password" => [
                         "O campo senha é obrigatório."
-                     ]
-               ]
-        ]);
+                    ]
+                ]
+            ]);
     }
 
     /**
@@ -184,33 +191,33 @@ class RecoveryPasswordTest extends TestCase
     {
         Notification::fake();
 
-        $this->post('/app/new-password',['password' => '123', 'password_confirmation' => '123'])
-        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        ->assertJson([
-            "success" => "false",
-            "data" => [
-                  "password" => [
-                    "O campo senha deve ter pelo menos 8 caracteres.",
-                    "O campo senha deve conter pelo menos uma letra."
+        $this->post('/app/new-password', ['password' => '123', 'password_confirmation' => '123'])
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson([
+                "success" => "false",
+                "data" => [
+                    "password" => [
+                        "O campo senha deve ter pelo menos 8 caracteres.",
+                        "O campo senha deve conter pelo menos uma letra."
+                    ]
                 ]
-            ]
-        ]);
+            ]);
     }
 
-      /**
+    /**
      * @test
      */
     public function shouldNotResetNewPasswordWithInvalidToken()
     {
         Notification::fake();
 
-        $this->post('/app/new-password',['password_token' => 'abcd14','password' => '1234abcd', 'password_confirmation' => '1234abcd'])
-        ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
-        ->assertJson([
-            "success" => "false",
-            "data" => [
-                  "message" => "Token para alteração de senha inválido."
-            ]
-        ]);
+        $this->post('/app/new-password', ['password_token' => 'abcd14', 'password' => '1234abcd', 'password_confirmation' => '1234abcd'])
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson([
+                "success" => "false",
+                "data" => [
+                    "message" => "Token para alteração de senha inválido."
+                ]
+            ]);
     }
 }
