@@ -87,7 +87,7 @@ class RecoveryPasswordTest extends TestCase
 
         $this->post('/app/validate-password-token', ['password_token' => $this->proxyNotification->password_token])
             ->assertSuccessful()
-            ->assertJsonStructure(["success", "data" => ["password_token"]]);
+            ->assertJsonStructure(['success', 'data' => ['password_token']]);
     }
 
     /**
@@ -101,9 +101,9 @@ class RecoveryPasswordTest extends TestCase
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson(
                 [
-                    "success" => false,
-                    "error" => [
-                        "message" => "Código de verificação inválido."
+                    'success' => false,
+                    'error' => [
+                        'message' => 'Código de verificação inválido.'
                     ]
                 ]
             );
@@ -121,10 +121,10 @@ class RecoveryPasswordTest extends TestCase
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson(
                 [
-                    "success" => false,
-                    "error" => [
-                        "password_token" => [
-                            "O campo password token não pode ser superior a 6 caracteres."
+                    'success' => false,
+                    'error' => [
+                        'password_token' => [
+                            'O campo password token não pode ser superior a 6 caracteres.'
                         ]
                     ]
                 ]
@@ -155,9 +155,9 @@ class RecoveryPasswordTest extends TestCase
         ])
             ->assertSuccessful()
             ->assertJson([
-                "success" => "true",
-                "data" => [
-                    "message" => "Senha alterada com sucesso."
+                'success' => 'true',
+                'data' => [
+                    'message' => 'Senha alterada com sucesso.'
                 ]
             ]);
     }
@@ -172,13 +172,13 @@ class RecoveryPasswordTest extends TestCase
         $this->post('/app/new-password')
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
-                "success" => false,
-                "error" => [
-                    "password_token" => [
-                        "O campo password token é obrigatório."
+                'success' => false,
+                'error' => [
+                    'password_token' => [
+                        'O campo password token é obrigatório.'
                     ],
-                    "password" => [
-                        "O campo senha é obrigatório."
+                    'password' => [
+                        'O campo senha é obrigatório.'
                     ]
                 ]
             ]);
@@ -194,11 +194,11 @@ class RecoveryPasswordTest extends TestCase
         $this->post('/app/new-password', ['password' => '123', 'password_confirmation' => '123'])
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
-                "success" => false,
-                "error" => [
-                    "password" => [
-                        "O campo senha deve ter pelo menos 8 caracteres.",
-                        "O campo senha deve conter pelo menos uma letra."
+                'success' => false,
+                'error' => [
+                    'password' => [
+                        'O campo senha deve ter pelo menos 8 caracteres.',
+                        'O campo senha deve conter pelo menos uma letra.'
                     ]
                 ]
             ]);
@@ -214,9 +214,9 @@ class RecoveryPasswordTest extends TestCase
         $this->post('/app/new-password', ['password_token' => 'abcd14', 'password' => '1234abcd', 'password_confirmation' => '1234abcd'])
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
-                "success" => false,
-                "error" => [
-                    "message" => "Token para alteração de senha inválido."
+                'success' => false,
+                'error' => [
+                    'message' => 'Token para alteração de senha inválido.'
                 ]
             ]);
     }

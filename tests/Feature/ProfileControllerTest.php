@@ -45,22 +45,22 @@ class ProfileControllerTest extends TestCase
 	public function shouldRegisterProfile()
 	{
 		$response = $this->post('/app/user/profile', [
-			"first_name" => "Olávo",
-			"last_name" => "Sales",
-			"cpf" => "70369233000"
+			'first_name' => 'Olávo',
+			'last_name' => 'Sales',
+			'cpf' => '70369233000'
 		], $this->auth);
 
 		$response->assertJsonStructure([
-			"success",
-			"data" => [
-				"first_name",
-				"last_name",
-				"cpf",
-				"user_id",
-				"uuid",
-				"updated_at",
-				"created_at",
-				"id"
+			'success',
+			'data' => [
+				'first_name',
+				'last_name',
+				'cpf',
+				'user_id',
+				'uuid',
+				'updated_at',
+				'created_at',
+				'id'
 			]
 		]);
 
@@ -76,16 +76,16 @@ class ProfileControllerTest extends TestCase
 
 		$response->assertJson(
 			[
-				"success" => false,
-				"error" => [
-					"first_name" => [
-						0 => "O campo primeiro nome é obrigatório."
+				'success' => false,
+				'error' => [
+					'first_name' => [
+						0 => 'O campo primeiro nome é obrigatório.'
 					],
-					"last_name" => [
-						0 => "O campo sobrenome é obrigatório."
+					'last_name' => [
+						0 => 'O campo sobrenome é obrigatório.'
 					],
-					"cpf" => [
-						0 => "O campo cpf é obrigatório."
+					'cpf' => [
+						0 => 'O campo cpf é obrigatório.'
 					]
 				]
 			]
@@ -100,22 +100,22 @@ class ProfileControllerTest extends TestCase
 	public function shoudNotRegisterUserAndReturnAllOthersErrors()
 	{
 		$response = $this->post('/app/user/profile', [
-				'first_name' => 'hakuna12', "last_name" => '123', 'cpf' => 00000
+				'first_name' => 'hakuna12', 'last_name' => '123', 'cpf' => 00000
 			],
 			$this->auth
 		);
 
 		$response->assertJson([
-			"success" => false,
-			"error" => [
-				"first_name" => [
-					"O campo primeiro nome só pode conter letras."
+			'success' => false,
+			'error' => [
+				'first_name' => [
+					'O campo primeiro nome só pode conter letras.'
 				],
-				"last_name" => [
-					"O campo sobrenome só pode conter letras."
+				'last_name' => [
+					'O campo sobrenome só pode conter letras.'
 				],
-				"cpf" => [
-					"CPF inválido"
+				'cpf' => [
+					'CPF inválido'
 				],
 			]
 		]);
@@ -131,9 +131,9 @@ class ProfileControllerTest extends TestCase
 		$response = $this->post('/app/user/profile');
 
 		$response->assertJson([
-			"success" => false,
-			"error" => [
-				"message" => "Token de autorização não encontrado"
+			'success' => false,
+			'error' => [
+				'message' => 'Token de autorização não encontrado'
 			]
 		]);
 

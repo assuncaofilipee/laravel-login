@@ -39,23 +39,23 @@ class AuthTest extends TestCase
     public function shouldLogin()
     {
         $response = $this->post('/app/login',
-        ['email' => $this->user->email, "password" => '123456ff']);
+        ['email' => $this->user->email, 'password' => '123456ff']);
 
         $response->assertJsonStructure(
             [
-                "success",
-                "data" => [
-                      "access_token",
-                      "token_type",
-                      "expires_in",
-                      "user" => [
-                         "id",
-                         "uuid",
-                         "email",
-                         "email_verified_at",
-                         "deleted_at",
-                         "created_at",
-                         "updated_at"
+                'success',
+                'data' => [
+                      'access_token',
+                      'token_type',
+                      'expires_in',
+                      'user' => [
+                         'id',
+                         'uuid',
+                         'email',
+                         'email_verified_at',
+                         'deleted_at',
+                         'created_at',
+                         'updated_at'
                       ]
                 ]
              ]);
@@ -68,14 +68,14 @@ class AuthTest extends TestCase
     public function shoundInvalidEmailLogin()
     {
         $data = [
-            "email" => 'fulano@gmail.com',
-            "password" => "batata123"
+            'email' => 'fulano@gmail.com',
+            'password' => 'batata123'
         ];
         $response = $this->post('/app/login', $data);
         $response->assertJson( [
-            "success" => false,
-            "error" => [
-                "email" => ["Email não cadastrado"]
+            'success' => false,
+            'error' => [
+                'email' => ['Email não cadastrado']
             ]
          ]);
         $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
@@ -93,9 +93,9 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertJson( [
-            "success" => false,
-            "error" => [
-                "message" => "Senha incorreta, favor revisar."
+            'success' => false,
+            'error' => [
+                'message' => 'Senha incorreta, favor revisar.'
             ]
          ]);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED);
@@ -108,13 +108,13 @@ class AuthTest extends TestCase
     {
         $response = $this->post('/app/login');
         $response->assertJson([
-            "success" => false,
-            "error" => [
-            "email" => [
-                  "O campo email é obrigatório."
+            'success' => false,
+            'error' => [
+            'email' => [
+                  'O campo email é obrigatório.'
                ],
-            "password" => [
-                     "O campo senha é obrigatório."
+            'password' => [
+                     'O campo senha é obrigatório.'
                   ]
             ]
         ]);
@@ -128,7 +128,7 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/app/me', $this->auth);
         $response->assertJsonFragment( [
-            "email" => $this->user->email,
+            'email' => $this->user->email,
          ]);
          $response->assertSuccessful();
     }
@@ -140,9 +140,9 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/app/me');
         $response->assertJson([
-            "success" => false,
-            "error" => [
-                "message" => "Token de autorização não encontrado"
+            'success' => false,
+            'error' => [
+                'message' => 'Token de autorização não encontrado'
             ]
          ]);
         $response->assertStatus(JsonResponse::HTTP_FORBIDDEN);
@@ -155,9 +155,9 @@ class AuthTest extends TestCase
     {
         $response = $this->post('/app/logout', [], $this->auth);
         $response->assertJson([
-            "success" => "true",
-            "data" => [
-                "message" => "Usuário desconectado com sucesso"
+            'success' => 'true',
+            'data' => [
+                'message' => 'Usuário desconectado com sucesso'
             ]
         ]);
         $response->assertSuccessful();
