@@ -39,7 +39,7 @@ class PasswordRecoveryRequest extends FormRequest
         $errors = (new ValidationException($validator))->errors();
 
         throw new HttpResponseException(
-            response()->json(['success' => 'false', 'data' => $errors], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            response()->json(['success' => false, 'error' => $errors], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         );
     }
 }

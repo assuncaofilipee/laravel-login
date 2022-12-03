@@ -95,20 +95,14 @@ class UserController extends Controller
     public function create(RegisterUserRequest $request): JsonResponse
     {
         $user = $this->service->create(
-            $request->only(
-                [
-                    'email',
-                    'email_confirmation',
-                    'password',
-                    'password_confirmation',
-                    'terms_of_use'
-                ]
-            )
+            $request->only([
+                'email',
+                'email_confirmation',
+                'password',
+                'password_confirmation',
+                'terms_of_use'
+            ])
         );
-
-        return response()->json([
-            'success' => 'true',
-            'data' => $user
-        ], JsonResponse::HTTP_CREATED);
+        return response()->success($user, JsonResponse::HTTP_CREATED);
     }
 }

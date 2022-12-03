@@ -76,8 +76,8 @@ class ProfileControllerTest extends TestCase
 
 		$response->assertJson(
 			[
-				"success" => "false",
-				"data" => [
+				"success" => false,
+				"error" => [
 					"first_name" => [
 						0 => "O campo primeiro nome é obrigatório."
 					],
@@ -106,8 +106,8 @@ class ProfileControllerTest extends TestCase
 		);
 
 		$response->assertJson([
-			"success" => "false",
-			"data" => [
+			"success" => false,
+			"error" => [
 				"first_name" => [
 					"O campo primeiro nome só pode conter letras."
 				],
@@ -131,8 +131,8 @@ class ProfileControllerTest extends TestCase
 		$response = $this->post('/app/user/profile');
 
 		$response->assertJson([
-			"success" => "false",
-			"data" => [
+			"success" => false,
+			"error" => [
 				"message" => "Token de autorização não encontrado"
 			]
 		]);

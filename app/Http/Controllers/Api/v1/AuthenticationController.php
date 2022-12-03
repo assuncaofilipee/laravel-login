@@ -102,23 +102,12 @@ class AuthenticationController extends Controller
         $dataToken = $this->service->createNewToken($credentials);
 
         if (empty($dataToken)) {
-            return response()->json(
-                [
-                    'success' => 'false',
-                    'data' => [
-                        'message' => 'Senha incorreta, favor revisar.'
-                    ]
-                ],
-                JsonResponse::HTTP_UNAUTHORIZED
-            );
+            return response()->error([
+                'message' => 'Senha incorreta, favor revisar.'
+            ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        return response()->json(
-            [
-                'success' => 'true',
-                'data' => $dataToken
-            ]
-        );
+        return response()->success($dataToken);
     }
 
     /**
@@ -158,14 +147,9 @@ class AuthenticationController extends Controller
     {
         $this->service->logout();
 
-        return response()->json(
-            [
-                'success' => 'true',
-                "data" => [
-                    'message' => 'Usuário desconectado com sucesso'
-                ]
-            ]
-        );
+        return response()->success([
+            'message' => 'Usuário desconectado com sucesso'
+        ]);
     }
     /**
      * @OA\Post(
@@ -190,12 +174,7 @@ class AuthenticationController extends Controller
      */
     public function refresh(): JsonResponse
     {
-        return response()->json(
-            [
-                'success' => 'true',
-                'data' => $this->service->refreshToken()
-            ]
-        );
+        return response()->success($this->service->refreshToken());
     }
     /**
      * @OA\Get(
@@ -233,11 +212,6 @@ class AuthenticationController extends Controller
      */
     public function me(): JsonResponse
     {
-        return response()->json(
-            [
-                "success" => "true",
-                "data" => $this->service->me()
-            ]
-        );
+        return response()->success($this->service->me());
     }
 }

@@ -24,7 +24,7 @@ class RegisterUserTest extends TestCase
                 "terms_of_use" => "true"
             ]
         );
-        
+
         $response->assertJsonFragment(["email" => "testuser@gmail.com"]);
 
         $response->assertSuccessful();
@@ -39,8 +39,8 @@ class RegisterUserTest extends TestCase
 
         $response->assertJson(
             [
-                "success" => "false",
-                "data" => [
+                "success" => false,
+                "error" => [
                     "email" => [
                         "O campo email é obrigatório."
                     ],
@@ -71,8 +71,8 @@ class RegisterUserTest extends TestCase
 
         $response->assertJson(
             [
-                "success" => "false",
-                "data" => [
+                "success" => false,
+                "error" => [
                     "email" => [
                         "O campo email deve ser um endereço de e-mail válido.",
                         "O campo email de confirmação não confere."

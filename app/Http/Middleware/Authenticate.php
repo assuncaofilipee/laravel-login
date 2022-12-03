@@ -14,11 +14,11 @@ class Authenticate
             JWTAuth::parseToken()->authenticate();
         } catch (\Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException){
-                return response()->json(['success' => 'false', 'data' => ['message' => 'Token inválido']], 401);
+                return response()->json(['success' => false, 'error' => ['message' => 'Token inválido']], 401);
             }else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException){
-                return response()->json(['success' => 'false',  'data' => ['message' => 'Token expirado']], 422);
+                return response()->json(['success' => false,  'error' => ['message' => 'Token expirado']], 422);
             }else{
-                return response()->json(['success' => 'false', 'data' => ['message' => 'Token de autorização não encontrado']], 403);
+                return response()->json(['success' => false, 'error' => ['message' => 'Token de autorização não encontrado']], 403);
             }
         }
 

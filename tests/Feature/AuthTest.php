@@ -73,8 +73,8 @@ class AuthTest extends TestCase
         ];
         $response = $this->post('/app/login', $data);
         $response->assertJson( [
-            "success" => "false",
-            "data" => [
+            "success" => false,
+            "error" => [
                 "email" => ["Email não cadastrado"]
             ]
          ]);
@@ -93,8 +93,8 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertJson( [
-            "success" => "false",
-            "data" => [
+            "success" => false,
+            "error" => [
                 "message" => "Senha incorreta, favor revisar."
             ]
          ]);
@@ -108,8 +108,8 @@ class AuthTest extends TestCase
     {
         $response = $this->post('/app/login');
         $response->assertJson([
-            "success" => "false",
-            "data" => [
+            "success" => false,
+            "error" => [
             "email" => [
                   "O campo email é obrigatório."
                ],
@@ -140,8 +140,8 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/app/me');
         $response->assertJson([
-            "success" => "false",
-            "data" => [
+            "success" => false,
+            "error" => [
                 "message" => "Token de autorização não encontrado"
             ]
          ]);

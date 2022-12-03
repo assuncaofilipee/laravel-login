@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordRecoveryRequest;
 use App\Http\Requests\PasswordResetRequest;
 use App\Http\Requests\PasswordTokenValidateRequest;
-use App\Models\User;
 use App\Services\PasswordResetService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -76,16 +75,12 @@ class RecoveryPasswordController extends Controller
     {
         $this->service->sendPasswordResentLink($request->get('email'));
 
-        return response()->json([
-            "success" => "true",
-            "data" => [
-                "message" => "Código de recuperação de senha enviado ao seu email."
-            ]
+        return response()->success([
+            "message" => "Código de recuperação de senha enviado ao seu email."
         ]);
-
     }
 
-       /**
+    /**
      * @OA\Post(
      *   tags={"Recuperação de senha"},
      *   summary="Validar código de verificação",
@@ -166,35 +161,25 @@ class RecoveryPasswordController extends Controller
     {
         $resetToken = $this->service->getResetToken($request->get('password_token'));
 
-        if(empty($resetToken)) {
-            return response()->json([
-                "success" => "false",
-                "data" => [
-                    "message" => "Código de verificação inválido."
-                ]
+        if (empty($resetToken)) {
+            return response()->error([
+                "message" => "Código de verificação inválido."
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if(Carbon::now()->greaterThan($resetToken->expires_at)) {
-            return response()->json([
-                "success" => "false",
-                "data" => [
-                    "message" => "Código de verificação expirado."
-                ]
+        if (Carbon::now()->greaterThan($resetToken->expires_at)) {
+            return response()->error([
+                "message" => "Código de verificação expirado."
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
         $newToken = $this->service->getResetIdentifierCode($resetToken);
 
-        if($newToken) {
-
+        if ($newToken) {
             $this->service->expiresTokenNow($resetToken);
 
-            return response()->json([
-                "success" => "true",
-                "data" => [
-                    "password_token" => $newToken
-                ]
+            return response()->success([
+                "password_token" => $newToken
             ]);
         }
     }
@@ -284,36 +269,26 @@ class RecoveryPasswordController extends Controller
     {
         $verifyToken = $this->service->getResetToken($request->get('password_token'));
 
-        if(empty($verifyToken)) {
-            return response()->json([
-                "success" => "false",
-                "data" => [
-                    "message" => "Token para alteração de senha inválido."
-                ]
+        if (empty($verifyToken)) {
+            return response()->error([
+                "message" => "Token para alteração de senha inválido."
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if(Carbon::now()->greaterThan($verifyToken->expires_at)) {
-            return response()->json([
-                "success" => "false",
-                "data" => [
-                    "message" => "Token para alteração de senha expirado."
-                ]
+        if (Carbon::now()->greaterThan($verifyToken->expires_at)) {
+            return response()->error([
+                "message" => "Token para alteração de senha expirado."
             ], JsonResponse::HTTP_FORBIDDEN);
         }
 
         $newPassword = Hash::make($request->all()['password']);
         $verifyToken->user->password = $newPassword;
 
-        if($verifyToken->user->save()) {
-
+        if ($verifyToken->user->save()) {
             $this->service->expiresTokenNow($verifyToken);
 
-            return response()->json([
-                "success" => "true",
-                "data" => [
-                    "message" => "Senha alterada com sucesso."
-                ]
+            return response()->success([
+                "message" => "Senha alterada com sucesso."
             ]);
         }
     }

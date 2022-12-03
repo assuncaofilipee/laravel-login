@@ -102,21 +102,13 @@ class ProfileController extends Controller
     public function create(RegisterProfileRequest $request): JsonResponse
     {
         $profile = $this->service->create(
-            $request->only(
-                [
-                    'first_name',
-                    'last_name',
-                    'cpf'
-                ]
-            )
+            $request->only([
+                'first_name',
+                'last_name',
+                'cpf'
+            ])
         );
 
-        return response()->json(
-            [
-                'success' => 'true',
-                'data' => $profile
-            ],
-            JsonResponse::HTTP_CREATED
-        );
+        return response()->success($profile, JsonResponse::HTTP_CREATED);
     }
 }

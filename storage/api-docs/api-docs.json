@@ -290,6 +290,143 @@
                 ]
             }
         },
+        "/app/user/profile": {
+            "post": {
+                "tags": [
+                    "Acesso"
+                ],
+                "summary": "Cadastro de dados pessoais do usuário da API",
+                "description": "Cadastra os dados pessoais do usuário",
+                "operationId": "74e3d896e45f9212a2e6d2fb98a6a5e5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "first_name": {
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "type": "string"
+                                    },
+                                    "cpf": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "examples": {
+                                "register-profile": {
+                                    "summary": "Exemplo cpf sem separador",
+                                    "value": {
+                                        "first_name": "Olávo",
+                                        "last_name": "Sales",
+                                        "cpf": "61906713065"
+                                    }
+                                },
+                                "register-profile1": {
+                                    "summary": "Exemplo cpf com separador",
+                                    "value": {
+                                        "first_name": "Olávo",
+                                        "last_name": "Sales",
+                                        "cpf": "619.067.130-65"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Cadastro feito com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/profileResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Campos inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "password": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "examples": {
+                                    "obrigatório": {
+                                        "summary": "Campos obrigatórios",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "email": [
+                                                    "O campo primeiro nome é obrigatório."
+                                                ],
+                                                "password": [
+                                                    "O campo sobrenome é obrigatório."
+                                                ],
+                                                "terms_of_use": [
+                                                    "O campo cpf é obrigatório."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "comfirmação": {
+                                        "summary": "Campos inválidos",
+                                        "value": {
+                                            "success": "false",
+                                            "data": {
+                                                "first_name": [
+                                                    "O campo primeiro nome só pode conter letras.",
+                                                    "O campo primeiro nome não pode ser superior a 50 caracteres."
+                                                ],
+                                                "last_name": [
+                                                    "O campo sobrenome só pode conter letras.",
+                                                    "O campo sobrenome não pode ser superior a 100 caracteres."
+                                                ],
+                                                "cpf": [
+                                                    "O campo cpf já está sendo utilizado.",
+                                                    "CPF inválido"
+                                                ]
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/app/forgot-password": {
             "post": {
                 "tags": [
@@ -663,143 +800,6 @@
                 }
             }
         },
-        "/app/user/profile": {
-            "post": {
-                "tags": [
-                    "Acesso"
-                ],
-                "summary": "Cadastro de dados pessoais do usuário da API",
-                "description": "Cadastra os dados pessoais do usuário",
-                "operationId": "1d1ff580c4b80d2bedeee33571c8a0db",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "first_name": {
-                                        "type": "string"
-                                    },
-                                    "last_name": {
-                                        "type": "string"
-                                    },
-                                    "cpf": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "examples": {
-                                "register-profile": {
-                                    "summary": "Exemplo cpf sem separador",
-                                    "value": {
-                                        "first_name": "Olávo",
-                                        "last_name": "Sales",
-                                        "cpf": "61906713065"
-                                    }
-                                },
-                                "register-profile1": {
-                                    "summary": "Exemplo cpf com separador",
-                                    "value": {
-                                        "first_name": "Olávo",
-                                        "last_name": "Sales",
-                                        "cpf": "619.067.130-65"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Cadastro feito com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/profileResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Campos inválidos",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "string"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "email": {
-                                                    "type": "string"
-                                                },
-                                                "password": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "examples": {
-                                    "obrigatório": {
-                                        "summary": "Campos obrigatórios",
-                                        "value": {
-                                            "success": "false",
-                                            "data": {
-                                                "email": [
-                                                    "O campo primeiro nome é obrigatório."
-                                                ],
-                                                "password": [
-                                                    "O campo sobrenome é obrigatório."
-                                                ],
-                                                "terms_of_use": [
-                                                    "O campo cpf é obrigatório."
-                                                ]
-                                            }
-                                        }
-                                    },
-                                    "comfirmação": {
-                                        "summary": "Campos inválidos",
-                                        "value": {
-                                            "success": "false",
-                                            "data": {
-                                                "first_name": [
-                                                    "O campo primeiro nome só pode conter letras.",
-                                                    "O campo primeiro nome não pode ser superior a 50 caracteres."
-                                                ],
-                                                "last_name": [
-                                                    "O campo sobrenome só pode conter letras.",
-                                                    "O campo sobrenome não pode ser superior a 100 caracteres."
-                                                ],
-                                                "cpf": [
-                                                    "O campo cpf já está sendo utilizado.",
-                                                    "CPF inválido"
-                                                ]
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/forbidden"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/unauthorized"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/app/user/register": {
             "post": {
                 "tags": [
@@ -807,7 +807,7 @@
                 ],
                 "summary": "Cadastro de usuário para utilização da API",
                 "description": "Retorna as informações do usuário cadastrado",
-                "operationId": "9a99d71e5fa95638abe951e0779dd024",
+                "operationId": "00d85c1350d1b1825d8a8ecc0c48a99e",
                 "requestBody": {
                     "required": true,
                     "content": {
