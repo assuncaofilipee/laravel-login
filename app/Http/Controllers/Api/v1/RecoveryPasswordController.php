@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PasswordRecoveryRequest;
-use App\Http\Requests\PasswordResetRequest;
-use App\Http\Requests\PasswordTokenValidateRequest;
+use App\Http\Requests\PasswordRecovery\PasswordRecoveryRequest;
+use App\Http\Requests\PasswordRecovery\PasswordResetRequest;
+use App\Http\Requests\PasswordRecovery\PasswordTokenValidateRequest;
 use App\Services\PasswordResetService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;

@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\User;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
-class LoginRequest extends FormRequest
+
+class StoreUserRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,15 +20,27 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users',
-            'password' => 'required|string|min:8',
+            'email' => 'required|string|email|confirmed|max:100|unique:users',
+            'name' => 'required|alpha|max:100',
+            'cpf' => 'required|cpf|unique:users',
+            'password' => [
+                'required',
+                'confirmed',
+                'max:45',
+                Password::min(8)
+                    ->letters()
+                    ->numbers()
+            ],
+            'terms_of_use' => 'required|in:true'
         ];
     }
+
 
     public function messages(): array
     {
         return [
-            'email.exists' => 'Email não cadastrado'
+            'terms_of_use.required' => 'O campo termos de uso é obrigatório.',
+            'terms_of_use.in' => 'É obrigatório o aceite dos Termos de uso'
         ];
     }
 

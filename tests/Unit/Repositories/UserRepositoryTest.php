@@ -21,6 +21,8 @@ class UserRepositoryTest extends TestCase
 
         $user = $userRepository->create([
             'email' => 'teste1@gmail.com',
+            'name' => 'Exemplo',
+            'cpf' => '98364797081',
             'password' => '123456f'
         ]);
 

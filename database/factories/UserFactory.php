@@ -13,9 +13,12 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $faker = \Faker\Factory::create('pt_BR');
         return [
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'name' => $faker->name,
+            'cpf' => $faker->cpf(false),
             'password' => '$2y$04$5qd73lxRXokcj/7nQhwj9e8jOgHK5S.rez.ztAzUspVAVMZinc4hS',
             'remember_token' => null,
         ];

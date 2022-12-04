@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\UnauthorizedException;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,7 @@ class AuthenticationService
     public function createNewToken(array $credentials): array
     {
         if (!$token = auth('api')->attempt($credentials)) {
-            return [];
+            throw new UnauthorizedException();
         }
 
         return [

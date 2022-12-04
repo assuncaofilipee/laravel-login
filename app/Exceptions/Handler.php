@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use PDOException;
@@ -44,13 +45,22 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof PDOException) {
+        if ($exception instanceof ModelNotFoundException) {
             return response()->json([
                 'success' => false,
-                'data' => [
+                'error' => [
+                    'message' => 'Objeto não encontrado'
+                ]
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } else if ($exception instanceof PDOException) {
+            return response()->json([
+                'success' => false,
+                'error' => [
                     'message' => 'Ocorreu um erro interno'
                 ]
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        return parent::render($request, $exception);
     }
 }

@@ -266,148 +266,11 @@
                                 "example": {
                                     "success": "true",
                                     "data": {
-                                        "email": "teste@gmail.comffffffffff",
+                                        "email": "exemplo@gmail.com",
                                         "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
                                         "updated_at": "2022-02-09T19:32:49.000000Z",
                                         "created_at": "2022-02-09T19:32:49.000000Z",
                                         "id": 470
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "$ref": "#/components/responses/forbidden"
-                    },
-                    "401": {
-                        "$ref": "#/components/responses/unauthorized"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/app/user/profile": {
-            "post": {
-                "tags": [
-                    "Acesso"
-                ],
-                "summary": "Cadastro de dados pessoais do usuário da API",
-                "description": "Cadastra os dados pessoais do usuário",
-                "operationId": "74e3d896e45f9212a2e6d2fb98a6a5e5",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "first_name": {
-                                        "type": "string"
-                                    },
-                                    "last_name": {
-                                        "type": "string"
-                                    },
-                                    "cpf": {
-                                        "type": "string"
-                                    }
-                                },
-                                "type": "object"
-                            },
-                            "examples": {
-                                "register-profile": {
-                                    "summary": "Exemplo cpf sem separador",
-                                    "value": {
-                                        "first_name": "Olávo",
-                                        "last_name": "Sales",
-                                        "cpf": "61906713065"
-                                    }
-                                },
-                                "register-profile1": {
-                                    "summary": "Exemplo cpf com separador",
-                                    "value": {
-                                        "first_name": "Olávo",
-                                        "last_name": "Sales",
-                                        "cpf": "619.067.130-65"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Cadastro feito com sucesso",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/profileResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Campos inválidos",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "string"
-                                        },
-                                        "data": {
-                                            "properties": {
-                                                "email": {
-                                                    "type": "string"
-                                                },
-                                                "password": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "examples": {
-                                    "obrigatório": {
-                                        "summary": "Campos obrigatórios",
-                                        "value": {
-                                            "success": "false",
-                                            "data": {
-                                                "email": [
-                                                    "O campo primeiro nome é obrigatório."
-                                                ],
-                                                "password": [
-                                                    "O campo sobrenome é obrigatório."
-                                                ],
-                                                "terms_of_use": [
-                                                    "O campo cpf é obrigatório."
-                                                ]
-                                            }
-                                        }
-                                    },
-                                    "comfirmação": {
-                                        "summary": "Campos inválidos",
-                                        "value": {
-                                            "success": "false",
-                                            "data": {
-                                                "first_name": [
-                                                    "O campo primeiro nome só pode conter letras.",
-                                                    "O campo primeiro nome não pode ser superior a 50 caracteres."
-                                                ],
-                                                "last_name": [
-                                                    "O campo sobrenome só pode conter letras.",
-                                                    "O campo sobrenome não pode ser superior a 100 caracteres."
-                                                ],
-                                                "cpf": [
-                                                    "O campo cpf já está sendo utilizado.",
-                                                    "CPF inválido"
-                                                ]
-                                            }
-                                        }
                                     }
                                 }
                             }
@@ -800,14 +663,78 @@
                 }
             }
         },
-        "/app/user/register": {
+        "/app/user": {
+            "get": {
+                "tags": [
+                    "Usuário"
+                ],
+                "summary": "Busca todos os usuários cadastrados",
+                "description": "Retorna todos os usuários cadastrados",
+                "operationId": "1526f1f1c9c0c6849ef2c442f3941274",
+                "responses": {
+                    "200": {
+                        "description": "Dados dos usuários cadastrados",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/user"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "current_page": 1,
+                                    "data": {
+                                        "email": "exemplo@gmail.com",
+                                        "name": "Exemplo",
+                                        "cpf": "98364797085",
+                                        "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
+                                        "updated_at": "2022-02-09T19:32:49.000000Z",
+                                        "created_at": "2022-02-09T19:32:49.000000Z",
+                                        "id": 470
+                                    },
+                                    "first_page_url": "http://localhost:6001/app/user?page=1",
+                                    "from": 1,
+                                    "next_page_url": null,
+                                    "path": "http://localhost:6001/app/user",
+                                    "per_page": 10,
+                                    "prev_page_url": null,
+                                    "to": 1
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
-                    "Acesso"
+                    "Usuário"
                 ],
-                "summary": "Cadastro de usuário para utilização da API",
+                "summary": "Cadastro de usuário",
                 "description": "Retorna as informações do usuário cadastrado",
-                "operationId": "00d85c1350d1b1825d8a8ecc0c48a99e",
+                "operationId": "66d2a9c39bfd050fd225cfec92e055fb",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -818,6 +745,12 @@
                                         "type": "string"
                                     },
                                     "email_confirmation": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "cpf": {
                                         "type": "string"
                                     },
                                     "password": {
@@ -838,6 +771,8 @@
                                     "value": {
                                         "email": "exemplo@gmail.com",
                                         "email_confirmation": "exemplo@gmail.com",
+                                        "name": "Exemplo",
+                                        "cpf": "98364797085",
                                         "password": "123a123a",
                                         "password_confirmation": "123a123a",
                                         "terms_of_use": true
@@ -890,6 +825,12 @@
                                                 "email": [
                                                     "O campo email é obrigatório."
                                                 ],
+                                                "name": [
+                                                    "O campo nome é obrigatório."
+                                                ],
+                                                "cpf": [
+                                                    "O campo cpf é obrigatório."
+                                                ],
                                                 "password": [
                                                     "O campo senha é obrigatório."
                                                 ],
@@ -908,6 +849,14 @@
                                                     "O campo email deve ser um endereço de e-mail válido.",
                                                     "O campo email de confirmação não confere."
                                                 ],
+                                                "name": [
+                                                    "O campo nome só pode conter letras.",
+                                                    "O campo nome não pode ser superior a 100 caracteres."
+                                                ],
+                                                "cpf": [
+                                                    "O campo cpf já está sendo utilizado.",
+                                                    "CPF inválido"
+                                                ],
                                                 "password": [
                                                     "O campo senha de confirmação não confere.",
                                                     "O campo senha deve ter pelo menos 8 caracteres.",
@@ -924,6 +873,144 @@
                         }
                     }
                 }
+            }
+        },
+        "/app/user/{id}": {
+            "get": {
+                "tags": [
+                    "Usuário"
+                ],
+                "summary": "Busca as informações do usuário solicitado",
+                "description": "Retorna informações do usuário solicitado",
+                "operationId": "1422386ed539c7386b8205548a588f09",
+                "responses": {
+                    "200": {
+                        "description": "Dados do usuário solicitado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/user"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "email": "exemplo@gmail.com",
+                                        "name": "Exemplo",
+                                        "cpf": "98364797085",
+                                        "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
+                                        "updated_at": "2022-02-09T19:32:49.000000Z",
+                                        "created_at": "2022-02-09T19:32:49.000000Z",
+                                        "id": 470
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Usuário"
+                ],
+                "summary": "Atualiza as informações do usuário enviado",
+                "description": "Retorna o usuário atualizado",
+                "operationId": "f1e4f9f8070818cc7cec0ee471461388",
+                "responses": {
+                    "200": {
+                        "description": "Dados do usuário solicitado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "": {
+                                                    "$ref": "#/components/schemas/user"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "success": "true",
+                                    "data": {
+                                        "email": "exemplo@gmail.com",
+                                        "name": "Exemplo",
+                                        "cpf": "98364797085",
+                                        "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
+                                        "updated_at": "2022-02-09T19:32:49.000000Z",
+                                        "created_at": "2022-02-09T19:32:49.000000Z",
+                                        "id": 470
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Usuário"
+                ],
+                "summary": "Deleta o usuário enviado",
+                "description": "Retorna status code 204 Not Content",
+                "operationId": "7c330d3324b52f09ad67cff63b6b971b",
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/forbidden"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/unauthorized"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
@@ -971,54 +1058,6 @@
                     }
                 }
             },
-            "profileResponse": {
-                "properties": {
-                    "success": {
-                        "type": "string"
-                    },
-                    "data": {
-                        "properties": {
-                            "first_name": {
-                                "type": "string"
-                            },
-                            "last_name": {
-                                "type": "string"
-                            },
-                            "cpf": {
-                                "type": "string"
-                            },
-                            "uuid": {
-                                "type": "string"
-                            },
-                            "updated_at": {
-                                "type": "string",
-                                "format": "date"
-                            },
-                            "created_at": {
-                                "type": "string",
-                                "format": "date"
-                            },
-                            "id": {
-                                "type": "integer"
-                            }
-                        },
-                        "type": "object"
-                    }
-                },
-                "type": "object",
-                "example": {
-                    "success": "true",
-                    "data": {
-                        "first_name": "Olávo",
-                        "last_name": "Sales",
-                        "cpf": "61906713065",
-                        "uuid": "250c9e0e-65df-4658-ad08-4cfe6d8abbf9",
-                        "updated_at": "2022-02-10T17:09:56.000000Z",
-                        "created_at": "2022-02-10T17:09:56.000000Z",
-                        "id": 2
-                    }
-                }
-            },
             "user": {
                 "properties": {
                     "id": {
@@ -1028,6 +1067,12 @@
                         "type": "string"
                     },
                     "email": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "cpf": {
                         "type": "string"
                     },
                     "email_verified_at": {

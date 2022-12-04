@@ -19,6 +19,8 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'uuid' =>  Str::uuid(36),
             'email' => 'exemplo@gmail.com',
+            'name' => 'Exemplo',
+            'cpf' => '98364797085',
             'password' => Hash::make('123a123a'),
          ]);
     }

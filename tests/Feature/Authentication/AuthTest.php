@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Authentication;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -95,7 +95,7 @@ class AuthTest extends TestCase
         $response->assertJson( [
             'success' => false,
             'error' => [
-                'message' => 'Senha incorreta, favor revisar.'
+                'message' => 'Usuário ou senha incorreto'
             ]
          ]);
         $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED);

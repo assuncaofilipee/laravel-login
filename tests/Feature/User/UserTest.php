@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\User;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\JsonResponse;
 use Tests\TestCase;
 
-class RegisterUserTest extends TestCase
+class UserTest extends TestCase
 {
     use DatabaseTransactions;
     /**
@@ -15,10 +15,12 @@ class RegisterUserTest extends TestCase
     public function shouldRegisterUser()
     {
         $response = $this->post(
-            '/app/user/register',
+            '/app/user',
             [
                 'email' => 'testuser@gmail.com',
                 'email_confirmation' => 'testuser@gmail.com',
+                'name' => 'Exemplo',
+                'cpf' => '54528600021',
                 'password' => '123456ff',
                 'password_confirmation' => '123456ff',
                 'terms_of_use' => 'true'
@@ -35,7 +37,7 @@ class RegisterUserTest extends TestCase
      */
     public function shoudNotRegisterUser()
     {
-        $response = $this->post('/app/user/register');
+        $response = $this->post('/app/user');
 
         $response->assertJson(
             [
@@ -43,6 +45,12 @@ class RegisterUserTest extends TestCase
                 'error' => [
                     'email' => [
                         'O campo email é obrigatório.'
+                    ],
+                    'name' => [
+                        'O campo nome é obrigatório.'
+                    ],
+                    'cpf' => [
+                        'O campo cpf é obrigatório.'
                     ],
                     'password' => [
                         'O campo senha é obrigatório.'
@@ -63,7 +71,7 @@ class RegisterUserTest extends TestCase
     public function shoudNotRegisterUserAndReturnAllOthersErrors()
     {
         $response = $this->post(
-            '/app/user/register',
+            '/app/user',
             [
                 'email' => 'hakuna.com', 'password' => '123', 'terms_of_use' => false
             ]

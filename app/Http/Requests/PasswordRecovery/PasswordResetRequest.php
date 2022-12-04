@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\PasswordRecovery;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
-class PasswordRecoveryRequest extends FormRequest
+class PasswordResetRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -18,20 +19,29 @@ class PasswordRecoveryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "email" => "required|email|exists:users,email"
+            "password_token" => "required|string|max:6",
+            'password' => [
+                'required',
+                'max:45',
+                'confirmed',
+                Password::min(8)
+                    ->letters()
+                    ->numbers()
+            ],
         ];
     }
 
-    public function messages(): array
-    {
-        return [
-            "email.exists" => "E-mail não encontrado, favor revisar!"
-        ];
-    }
 
     public function expectsJson(): bool
     {
         return true;
+    }
+
+    public function messages()
+    {
+        return [
+            //
+        ];
     }
 
     public function failedValidation(Validator $validator): void

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\LoginRequest;
+use App\Http\Requests\Authentication\LoginRequest;
 use App\Services\AuthenticationService;
 use Illuminate\Http\JsonResponse;
 
@@ -95,14 +95,7 @@ class AuthenticationController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only(['email', 'password']);
-
         $dataToken = $this->service->createNewToken($credentials);
-
-        if (empty($dataToken)) {
-            return response()->error([
-                'message' => 'Senha incorreta, favor revisar.'
-            ], JsonResponse::HTTP_UNAUTHORIZED);
-        }
 
         return response()->success($dataToken);
     }
@@ -193,7 +186,7 @@ class AuthenticationController extends Controller
      *      example={
      *          "success" : "true",
      *          "data" : {
-     *                       "email": "teste@gmail.comffffffffff",
+     *                       "email": "exemplo@gmail.com",
      *                       "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
      *                       "updated_at": "2022-02-09T19:32:49.000000Z",
      *                       "created_at": "2022-02-09T19:32:49.000000Z",
