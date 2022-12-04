@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use PDOException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -50,6 +51,13 @@ class Handler extends ExceptionHandler
                 'success' => false,
                 'error' => [
                     'message' => 'Objeto não encontrado'
+                ]
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } else if ($exception instanceof NotFoundHttpException) {
+            return response()->json([
+                'success' => false,
+                'error' => [
+                    'message' => 'Rota não encontrada'
                 ]
             ], JsonResponse::HTTP_NOT_FOUND);
         } else if ($exception instanceof PDOException) {
