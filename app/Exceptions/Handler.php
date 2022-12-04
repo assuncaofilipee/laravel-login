@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
@@ -52,14 +51,14 @@ class Handler extends ExceptionHandler
             [$exception instanceof PDOException, 'Ocorreu um erro interno', JsonResponse::HTTP_INTERNAL_SERVER_ERROR]
         ];
 
-        foreach ($exceptionMap as $exception) {
-            if ($exception[0]) {
+        foreach ($exceptionMap as $exceptionItem) {
+            if ($exceptionItem[0]) {
                 return response()->json([
                     'success' => false,
                     'error' => [
-                        'message' => $exception[1]
+                        'message' => $exceptionItem[1]
                     ]
-                ], $exception[2]);
+                ], $exceptionItem[2]);
             }
         }
 

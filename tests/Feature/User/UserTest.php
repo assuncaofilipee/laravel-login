@@ -35,7 +35,7 @@ class UserTest extends TestCase
     /**
      * @test
      */
-    public function shoudNotRegisterUser()
+    public function shoudNotRegisterUserAndReturnValidateErrors()
     {
         $response = $this->post('/app/users');
 
@@ -98,5 +98,17 @@ class UserTest extends TestCase
         );
 
         $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    /**
+     * @test
+     */
+    public function shoudReturnModelNotFound()
+    {
+        $response = $this->get(
+            '/app/users/9999999999999'
+        );
+
+        $response->assertStatus(JsonResponse::HTTP_NOT_FOUND);
     }
 }
