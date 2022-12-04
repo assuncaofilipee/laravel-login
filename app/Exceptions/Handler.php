@@ -46,27 +46,21 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        if ($exception instanceof ModelNotFoundException) {
-            return response()->json([
-                'success' => false,
-                'error' => [
-                    'message' => 'Objeto não encontrado'
-                ]
-            ], JsonResponse::HTTP_NOT_FOUND);
-        } else if ($exception instanceof NotFoundHttpException) {
-            return response()->json([
-                'success' => false,
-                'error' => [
-                    'message' => 'Rota não encontrada'
-                ]
-            ], JsonResponse::HTTP_NOT_FOUND);
-        } else if ($exception instanceof PDOException) {
-            return response()->json([
-                'success' => false,
-                'error' => [
-                    'message' => 'Ocorreu um erro interno'
-                ]
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        $exceptionMap = [
+            [$exception instanceof ModelNotFoundException,  'Objeto não encontrado', JsonResponse::HTTP_NOT_FOUND],
+            [$exception instanceof NotFoundHttpException,  'Rota não encontrada', JsonResponse::HTTP_NOT_FOUND],
+            [$exception instanceof PDOException, 'Ocorreu um erro interno', JsonResponse::HTTP_INTERNAL_SERVER_ERROR]
+        ];
+
+        foreach ($exceptionMap as $exception) {
+            if ($exception[0]) {
+                return response()->json([
+                    'success' => false,
+                    'error' => [
+                        'message' => $exception[1]
+                    ]
+                ], $exception[2]);
+            }
         }
 
         return parent::render($request, $exception);
