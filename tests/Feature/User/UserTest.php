@@ -15,7 +15,7 @@ class UserTest extends TestCase
     public function shouldRegisterUser()
     {
         $response = $this->post(
-            '/app/user',
+            '/app/users',
             [
                 'email' => 'testuser@gmail.com',
                 'email_confirmation' => 'testuser@gmail.com',
@@ -37,7 +37,7 @@ class UserTest extends TestCase
      */
     public function shoudNotRegisterUser()
     {
-        $response = $this->post('/app/user');
+        $response = $this->post('/app/users');
 
         $response->assertJson(
             [
@@ -71,7 +71,7 @@ class UserTest extends TestCase
     public function shoudNotRegisterUserAndReturnAllOthersErrors()
     {
         $response = $this->post(
-            '/app/user',
+            '/app/users',
             [
                 'email' => 'hakuna.com', 'password' => '123', 'terms_of_use' => false
             ]

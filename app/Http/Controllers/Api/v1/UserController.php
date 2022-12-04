@@ -20,10 +20,10 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *   tags={"Usuário"},
+     *   tags={"Usuários"},
      *   summary="Busca todos os usuários cadastrados",
      *   description="Retorna todos os usuários cadastrados",
-     *   path="/app/user",
+     *   path="/app/users",
      *    security={
      *           {"bearerAuth": {}}
      *       },
@@ -70,10 +70,10 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     tags={"Usuário"},
+     *     tags={"Usuários"},
      *     summary="Cadastro de usuário",
      *     description="Retorna as informações do usuário cadastrado",
-     *     path="/app/user",
+     *     path="/app/users",
      *     @OA\RequestBody(
      *       required=true,
      *       @OA\JsonContent(
@@ -179,10 +179,10 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *   tags={"Usuário"},
+     *   tags={"Usuários"},
      *   summary="Busca as informações do usuário solicitado",
      *   description="Retorna informações do usuário solicitado",
-     *   path="/app/user/{id}",
+     *   path="/app/users/{id}",
      *    security={
      *           {"bearerAuth": {}}
      *       },
@@ -220,10 +220,10 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *   tags={"Usuário"},
+     *   tags={"Usuários"},
      *   summary="Atualiza as informações do usuário enviado",
      *   description="Retorna o usuário atualizado",
-     *   path="/app/user/{id}",
+     *   path="/app/users/{id}",
      *    security={
      *           {"bearerAuth": {}}
      *       },
@@ -268,10 +268,10 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *   tags={"Usuário"},
+     *   tags={"Usuários"},
      *   summary="Deleta o usuário enviado",
      *   description="Retorna status code 204 Not Content",
-     *   path="/app/user/{id}",
+     *   path="/app/users/{id}",
      *    security={
      *           {"bearerAuth": {}}
      *       },

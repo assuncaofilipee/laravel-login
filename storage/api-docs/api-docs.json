@@ -663,14 +663,14 @@
                 }
             }
         },
-        "/app/user": {
+        "/app/users": {
             "get": {
                 "tags": [
-                    "Usuário"
+                    "Usuários"
                 ],
                 "summary": "Busca todos os usuários cadastrados",
                 "description": "Retorna todos os usuários cadastrados",
-                "operationId": "1526f1f1c9c0c6849ef2c442f3941274",
+                "operationId": "c763b0c73e83e3f268c2dcf071a91a8b",
                 "responses": {
                     "200": {
                         "description": "Dados dos usuários cadastrados",
@@ -730,11 +730,11 @@
             },
             "post": {
                 "tags": [
-                    "Usuário"
+                    "Usuários"
                 ],
                 "summary": "Cadastro de usuário",
                 "description": "Retorna as informações do usuário cadastrado",
-                "operationId": "66d2a9c39bfd050fd225cfec92e055fb",
+                "operationId": "a17f0a08690c37a5e408fab4aaf6b148",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -875,14 +875,14 @@
                 }
             }
         },
-        "/app/user/{id}": {
+        "/app/users/{id}": {
             "get": {
                 "tags": [
-                    "Usuário"
+                    "Usuários"
                 ],
                 "summary": "Busca as informações do usuário solicitado",
                 "description": "Retorna informações do usuário solicitado",
-                "operationId": "1422386ed539c7386b8205548a588f09",
+                "operationId": "89bf3a84015e62df52ae03680044cfdc",
                 "responses": {
                     "200": {
                         "description": "Dados do usuário solicitado",
@@ -934,11 +934,11 @@
             },
             "put": {
                 "tags": [
-                    "Usuário"
+                    "Usuários"
                 ],
                 "summary": "Atualiza as informações do usuário enviado",
                 "description": "Retorna o usuário atualizado",
-                "operationId": "f1e4f9f8070818cc7cec0ee471461388",
+                "operationId": "df05d3a8fe05877f0d604cad0db4b66b",
                 "responses": {
                     "200": {
                         "description": "Dados do usuário solicitado",
@@ -990,11 +990,11 @@
             },
             "delete": {
                 "tags": [
-                    "Usuário"
+                    "Usuários"
                 ],
                 "summary": "Deleta o usuário enviado",
                 "description": "Retorna status code 204 Not Content",
-                "operationId": "7c330d3324b52f09ad67cff63b6b971b",
+                "operationId": "8be039f326fc00c74198370530b0417a",
                 "responses": {
                     "204": {
                         "description": ""
