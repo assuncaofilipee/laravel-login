@@ -52,7 +52,7 @@ Preencha o valor da variável UID no arquivo .env pelo resultado do comando abai
 ```bash
 id -u
 ```
-Escolha um servidor de email de sua preferência e preencha as variaveis de ambiente no arquivo .env com suas credencais.
+Escolha um servidor de email de sua preferência e preencha as variaveis de ambiente no arquivo .env com suas credencais. (Caso não preencha, os recusos de recuperação de senha não funcionarão, mas o restante do projeto funcionará):
 
 ```bash
 MAIL_MAILER
