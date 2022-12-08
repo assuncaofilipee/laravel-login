@@ -5,6 +5,7 @@ namespace Tests\Feature\Authentication;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -12,8 +13,8 @@ class AuthTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $auth;
-    private $user;
+    private array $auth;
+    private User $user;
 
     public function setUp(): void
     {
@@ -30,136 +31,135 @@ class AuthTest extends TestCase
         $this->auth = [
             'Authorization' => 'Bearer ' . $token
         ];
-
     }
 
-    /**
-     * @test
-     */
-    public function shouldLogin()
+    public function testShouldReturnTokenInLogin()
     {
-        $response = $this->post('/app/login',
-        ['email' => $this->user->email, 'password' => '123456ff']);
-
-        $response->assertJsonStructure(
-            [
-                'success',
-                'data' => [
-                      'access_token',
-                      'token_type',
-                      'expires_in',
-                      'user' => [
-                         'id',
-                         'uuid',
-                         'email',
-                         'email_verified_at',
-                         'deleted_at',
-                         'created_at',
-                         'updated_at'
-                      ]
+        $this->post('/app/login', ['email' => $this->user->email, 'password' => '123456ff'])
+            ->assertSuccessful()
+            ->assertJsonStructure(
+                [
+                    'success',
+                    'data' => [
+                        'access_token',
+                        'token_type',
+                        'expires_in',
+                        'user' => [
+                            'id',
+                            'uuid',
+                            'email',
+                            'email_verified_at',
+                            'deleted_at',
+                            'created_at',
+                            'updated_at'
+                        ]
+                    ]
                 ]
-             ]);
-         $response->assertSuccessful();
+            );
     }
 
-    /**
-     *  @test
-     */
-    public function shoundInvalidEmailLogin()
+    public function testShoundReturnInvalidEmailInLogin()
     {
-        $data = [
+        $this->post('/app/login', [
             'email' => 'fulano@gmail.com',
             'password' => 'batata123'
-        ];
-        $response = $this->post('/app/login', $data);
-        $response->assertJson( [
-            'success' => false,
-            'error' => [
-                'email' => ['Email não cadastrado']
-            ]
-         ]);
-        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        ])
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson([
+                'success' => false,
+                'error' => [
+                    'email' => ['Email não cadastrado']
+                ]
+            ]);
     }
 
-       /**
-     *  @test
-     */
-    public function shoundInvalidPasswordLogin()
+    public function testShoundReturnInvalidPasswordInLogin()
     {
-
-        $response = $this->post('/app/login', [
+        $this->post('/app/login', [
             'email' => $this->user->email,
             'password' => '123456zz'
-        ]);
-
-        $response->assertJson( [
-            'success' => false,
-            'error' => [
-                'message' => 'Usuário ou senha incorreto'
-            ]
-         ]);
-        $response->assertStatus(JsonResponse::HTTP_UNAUTHORIZED);
+        ])
+            ->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
+            ->assertJson([
+                'success' => false,
+                'error' => [
+                    'message' => 'Usuário ou senha incorreto'
+                ]
+            ]);
     }
 
-    /**
-     *  @test
-     */
-    public function shoundDataInvalidLogin()
+    public function testShouldReturnInvalidFieldsInLogin()
     {
-        $response = $this->post('/app/login');
-        $response->assertJson([
-            'success' => false,
-            'error' => [
-            'email' => [
-                  'O campo email é obrigatório.'
-               ],
-            'password' => [
-                     'O campo senha é obrigatório.'
-                  ]
-            ]
-        ]);
-        $response->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
+        $this->post('/app/login')
+            ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+            ->assertJson([
+                'success' => false,
+                'error' => [
+                    'email' => [
+                        'O campo email é obrigatório.'
+                    ],
+                    'password' => [
+                        'O campo senha é obrigatório.'
+                    ]
+                ]
+            ]);
     }
 
-    /**
-     * @test
-     */
-    public function shoudGetMe()
+    public function testShouldReturnEmailInGetMe()
     {
-        $response = $this->get('/app/me', $this->auth);
-        $response->assertJsonFragment( [
-            'email' => $this->user->email,
-         ]);
-         $response->assertSuccessful();
+        $this->get('/app/me', $this->auth)
+            ->assertSuccessful()
+            ->assertJsonFragment([
+                'email' => $this->user->email,
+            ]);
     }
 
-    /**
-     * @test
-     */
-    public function shoudNotGetMeData()
+    public function testShoudReturnForbiddenInGetMeData()
     {
-        $response = $this->get('/app/me');
-        $response->assertJson([
-            'success' => false,
-            'error' => [
-                'message' => 'Token de autorização não encontrado'
-            ]
-         ]);
-        $response->assertStatus(JsonResponse::HTTP_FORBIDDEN);
+        $this->get('/app/me')
+            ->assertStatus(JsonResponse::HTTP_FORBIDDEN)
+            ->assertJson([
+                'success' => false,
+                'error' => [
+                    'message' => 'Token de autorização não encontrado'
+                ]
+            ]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldLogout()
+    public function testShouldLogout()
     {
-        $response = $this->post('/app/logout', [], $this->auth);
-        $response->assertJson([
-            'success' => 'true',
-            'data' => [
-                'message' => 'Usuário desconectado com sucesso'
-            ]
-        ]);
-        $response->assertSuccessful();
+        $this->post('/app/logout', [], $this->auth)
+            ->assertSuccessful()
+            ->assertJson([
+                'success' => 'true',
+                'data' => [
+                    'message' => 'Usuário desconectado com sucesso'
+                ]
+            ]);
+    }
+
+    public function testShouldReturnTokenInRefresh()
+    {
+        $this->post('/app/refresh', [], $this->auth)
+            ->assertSuccessful()
+            ->assertJsonStructure(
+                [
+                    'success',
+                    'data' => [
+                        'access_token',
+                        'token_type',
+                        'expires_in',
+                        'user' => [
+                            'id',
+                            'uuid',
+                            'email',
+                            'email_verified_at',
+                            'deleted_at',
+                            'created_at',
+                            'updated_at'
+                        ]
+                    ]
+                ]
+            );
     }
 }

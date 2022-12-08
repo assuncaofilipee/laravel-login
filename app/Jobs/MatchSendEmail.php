@@ -31,6 +31,6 @@ class MatchSendEmail implements ShouldQueue
      */
     public function handle()
     {
-        echo 'ahahaha';
+        
     }
 }

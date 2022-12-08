@@ -1,5 +1,8 @@
 FROM php:8.0.2-fpm
 
+RUN pecl install xdebug \
+&& docker-php-ext-enable xdebug 
+
 ARG user
 ARG uid
 

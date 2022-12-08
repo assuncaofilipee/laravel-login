@@ -47,6 +47,6 @@ class PasswordResetNotification extends Notification  implements ShouldQueue
         ->line('Por favor insira o código abaixo na página de recuperação de senha')
         ->line($this->password_token)
         ->line('Se você não requisitou a recuperação de senha, por favor ignore essa mensaggem.')
-        ->subject('Trouw - Recuperação de senha');
+        ->subject('Laravel Login - Recuperação de senha');
     }
 }
