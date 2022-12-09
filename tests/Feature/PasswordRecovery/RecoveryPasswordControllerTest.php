@@ -12,7 +12,7 @@ use SebastianBergmann\PeekAndPoke\Proxy;
 use Tests\TestCase;
 
 
-class RecoveryPasswordTest extends TestCase
+class RecoveryControllerPasswordTest extends TestCase
 {
     use DatabaseTransactions;
 

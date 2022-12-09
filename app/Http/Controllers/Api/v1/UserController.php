@@ -45,7 +45,7 @@ class UserController extends Controller
      *               "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
      *               "updated_at": "2022-02-09T19:32:49.000000Z",
      *               "created_at": "2022-02-09T19:32:49.000000Z",
-     *               "id": 470
+     *               "deleted_at": null
      *          },
      *          "first_page_url": "http://localhost:6001/app/user?page=1",
      *          "from": 1,
@@ -215,7 +215,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->success($user->get(), JsonResponse::HTTP_OK);
+        return response()->success($user, JsonResponse::HTTP_OK);
     }
 
     /**

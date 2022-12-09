@@ -22,6 +22,8 @@ class UserSeeder extends Seeder
             'name' => 'Exemplo',
             'cpf' => '98364797085',
             'password' => Hash::make('123a123a'),
+            'created_at' => now(),
+            'updated_at' => now()
          ]);
     }
 }

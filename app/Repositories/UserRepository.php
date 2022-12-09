@@ -15,9 +15,6 @@ class UserRepository
 
     public function create($data)
     {
-        return $this->user::create(array_merge(
-            $data,
-            ['password' => bcrypt($data['password'])]
-        ));
+        return $this->user::create($data);
     }
 }

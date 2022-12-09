@@ -21,6 +21,8 @@ class UserFactory extends Factory
             'cpf' => $faker->cpf(false),
             'password' => '$2y$04$5qd73lxRXokcj/7nQhwj9e8jOgHK5S.rez.ztAzUspVAVMZinc4hS',
             'remember_token' => null,
+            'created_at' => now(),
+            'updated_at' => now()
         ];
     }
 

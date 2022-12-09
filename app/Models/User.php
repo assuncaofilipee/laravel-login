@@ -15,13 +15,14 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
+    public $timestamps = true;
+
     protected $fillable = [
         'uuid',
         'email',
         'name',
         'cpf',
         'password',
-        'deleted_at'
     ];
 
     /**
@@ -30,8 +31,10 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $hidden = [
+        'id',
         'password',
         'remember_token',
+        'deleted_at'
     ];
 
     /**

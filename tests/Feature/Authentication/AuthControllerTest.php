@@ -5,11 +5,10 @@ namespace Tests\Feature\Authentication;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
-class AuthTest extends TestCase
+class AuthControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -23,11 +22,12 @@ class AuthTest extends TestCase
         $this->user = User::factory()->create([
             'password' => Hash::make('123456ff')
         ]);
-        $response = $this->post('/app/login', [
+
+        $token = $this->post('/app/login', [
             'email' => $this->user->email,
             'password' => '123456ff'
-        ]);
-        $token = $response->json()['data']['access_token'];
+        ])->json()['data']['access_token'];
+
         $this->auth = [
             'Authorization' => 'Bearer ' . $token
         ];
@@ -45,11 +45,9 @@ class AuthTest extends TestCase
                         'token_type',
                         'expires_in',
                         'user' => [
-                            'id',
                             'uuid',
                             'email',
                             'email_verified_at',
-                            'deleted_at',
                             'created_at',
                             'updated_at'
                         ]
@@ -150,11 +148,9 @@ class AuthTest extends TestCase
                         'token_type',
                         'expires_in',
                         'user' => [
-                            'id',
                             'uuid',
                             'email',
                             'email_verified_at',
-                            'deleted_at',
                             'created_at',
                             'updated_at'
                         ]
