@@ -4,16 +4,17 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Authentication\LoginRequest;
+use App\Repositories\Interfaces\AuthenticationRepositoryInterface;
 use App\Services\AuthenticationService;
 use Illuminate\Http\JsonResponse;
 
 class AuthenticationController extends Controller
 {
-    private AuthenticationService $service;
+    private AuthenticationRepositoryInterface $authenticationRepository;
 
-    public function __construct(AuthenticationService $service)
+    public function __construct(AuthenticationRepositoryInterface $authenticationRepository)
     {
-        $this->service = $service;
+        $this->authenticationRepository = $authenticationRepository;
     }
     /**
      * @OA\Post(
@@ -95,7 +96,7 @@ class AuthenticationController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only(['email', 'password']);
-        $dataToken = $this->service->createNewToken($credentials);
+        $dataToken = $this->authenticationRepository->createNewToken($credentials);
 
         return response()->success($dataToken);
     }
@@ -135,7 +136,7 @@ class AuthenticationController extends Controller
      */
     public function logout(): JsonResponse
     {
-        $this->service->logout();
+        $this->authenticationRepository->logout();
 
         return response()->success([
             'message' => 'Usuário desconectado com sucesso'
@@ -164,7 +165,7 @@ class AuthenticationController extends Controller
      */
     public function refresh(): JsonResponse
     {
-        return response()->success($this->service->refreshToken());
+        return response()->success($this->authenticationRepository->refreshToken());
     }
     /**
      * @OA\Get(
@@ -202,6 +203,6 @@ class AuthenticationController extends Controller
      */
     public function me(): JsonResponse
     {
-        return response()->success($this->service->me());
+        return response()->success($this->authenticationRepository->me());
     }
 }

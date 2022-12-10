@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Repositories;
 
 use App\Exceptions\UnauthorizedException;
 use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use App\Repositories\Interfaces\AuthenticationRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 
-class AuthenticationService
+class AuthenticationRepository implements AuthenticationRepositoryInterface
 {
     public function createNewToken(array $credentials): array
     {

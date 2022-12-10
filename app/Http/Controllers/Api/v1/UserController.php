@@ -5,17 +5,16 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Models\User;
-use App\Services\UserService;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
-    protected $service;
+    protected $userRepository;
 
-    public function __construct(UserService $service)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
-        $this->service = $service;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -64,8 +63,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->simplePaginate(10);
-        return response()->success($users, JsonResponse::HTTP_OK, true);
+        return response()->success($this->userRepository->all(), JsonResponse::HTTP_OK, true);
     }
 
     /**
@@ -164,7 +162,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): JsonResponse
     {
-        $user = $this->service->create(
+        $user = $this->userRepository->create(
             $request->only([
                 'email',
                 'name',
@@ -213,9 +211,12 @@ class UserController extends Controller
      *    ),
      * )
      */
-    public function show(User $user)
+    public function show(int $id)
     {
-        return response()->success($user, JsonResponse::HTTP_OK);
+        return response()->success(
+            $this->userRepository->show($id),
+            JsonResponse::HTTP_OK
+        );
     }
 
     /**
@@ -254,9 +255,9 @@ class UserController extends Controller
      *    ),
      * )
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, int $id)
     {
-        $user->update($request->only([
+        $user = $this->userRepository->update($id, $request->only([
             'email',
             'name',
             'cpf',
@@ -284,9 +285,9 @@ class UserController extends Controller
      *    ),
      * )
      */
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
-        $user->delete();
+        $this->userRepository->delete($id);
         return response()->success('', JsonResponse::HTTP_NO_CONTENT);
     }
 }

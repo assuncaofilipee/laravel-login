@@ -141,4 +141,32 @@ class UserControllerTest extends TestCase
 
             ]);
     }
+
+    public function testShouldUpdateUser(): void
+    {
+        $expected = $this->user->toArray();
+        $expected['name'] = 'zezinho';
+
+        $this->put('/app/users/' . $this->user->id, ['name' => $expected['name']], $this->auth)
+            ->assertSuccessful()
+            ->assertJson([
+                "success" => true,
+                "data" => [
+                    "name" => $expected['name']
+                    ]
+                ]
+            );
+    }
+
+    public function testShouldUpdateInvalidUserAndReturnNotFound(): void
+    {
+        $this->put('/app/users/999999999999', [], $this->auth)
+            ->assertStatus(JsonResponse::HTTP_NOT_FOUND);
+    }
+
+    public function testShouldDeleteUser(): void
+    {
+        $this->delete('/app/users/' . $this->user->id, [], $this->auth)
+            ->assertStatus(JsonResponse::HTTP_NO_CONTENT);
+    }
 }

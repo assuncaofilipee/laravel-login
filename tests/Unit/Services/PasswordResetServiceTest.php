@@ -16,16 +16,15 @@ class PasswordResetServiceTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $user;
-    private $passwordResetService;
-    private $proxyNotification;
-    private $resetToken;
-    private $faker;
+    private User $user;
+    private PasswordResetService $passwordResetService;
+    private PasswordResetNotification $proxyNotification;
+    private PasswordReset $resetToken;
 
     public function setUp(): void
     {
         parent::setUp();
-       
+
         $this->user =  User::factory()->create();
 
         $passwordReset = new PasswordReset();
@@ -38,7 +37,7 @@ class PasswordResetServiceTest extends TestCase
             $this->user,
             PasswordResetNotification::class,
             function ($notification) {
-                $this->proxyNotification = new Proxy($notification);
+                $this->proxyNotification = $notification;
                 return $notification !== null;
             }
         );
@@ -46,30 +45,32 @@ class PasswordResetServiceTest extends TestCase
         $this->resetToken = $this->passwordResetService->getResetToken($this->proxyNotification->password_token);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetResetCodeIsAlphaNumericString()
+    public function testSendEmailText(): void
+    {
+        Notification::assertSentTo(
+            $this->user,
+            PasswordResetNotification::class,
+            function ($notification) {
+                return $notification->toMail($this->user)->subject === 'Laravel Login - Recuperação de senha';
+            }
+        );
+    }
+
+    public function testShouldGetResetCodeIsAlphaNumericString(): void
     {
         $token = $this->passwordResetService->getResetCode();
         $this->assertTrue(ctype_alnum($token));
         $this->assertEquals(strlen($token), 6);
     }
 
-    /**
-     * @test
-     */
-    public function shouldSendPasswordResentLink()
+    public function testShouldSendPasswordResentLink(): void
     {
         Notification::fake();
         $this->passwordResetService->sendPasswordResentLink($this->user->email);
         Notification::assertSentTo($this->user, PasswordResetNotification::class);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetResetIdentifierCode()
+    public function testShouldGetResetIdentifierCode(): void
     {
         $newToken = $this->passwordResetService->getResetIdentifierCode($this->resetToken);
 
@@ -77,18 +78,12 @@ class PasswordResetServiceTest extends TestCase
         $this->assertEquals(strlen($newToken), 6);
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetResetToken()
+    public function testShouldGetResetToken(): void
     {
         $this->assertInstanceOf(PasswordReset::class, $this->resetToken);
     }
 
-    /**
-     * @test
-     */
-    public function ShouldExpiresToken()
+    public function ShouldExpiresToken(): void
     {
         $this->assertTrue($this->passwordResetService->expiresTokenNow($this->resetToken));
         $token = $this->resetToken->fresh();

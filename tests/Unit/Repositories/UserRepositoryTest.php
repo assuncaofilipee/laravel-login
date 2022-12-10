@@ -11,10 +11,7 @@ class UserRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @test
-     */
-    public function shouldCreateNewUser()
+    public function testShouldCreateNewUser(): void
     {
         $user = new User();
         $userRepository = new UserRepository($user);

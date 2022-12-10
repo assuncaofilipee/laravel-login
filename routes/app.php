@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\v1\AuthenticationController;
-use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\RecoveryPasswordController;
 use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Support\Facades\Route;
@@ -18,7 +17,7 @@ Route::group(['middleware' => 'auth:api'], function ($router) {
     Route::post('logout', [AuthenticationController::class, 'logout']);
     Route::post('refresh', [AuthenticationController::class, 'refresh']);
     Route::get('me', [AuthenticationController::class, 'me']);
-    Route::resource('users', UserController::class)->except([
-        'create', 'edit', 'store'
+    Route::apiResource('users', UserController::class)->except([
+        'store'
     ]);
 });

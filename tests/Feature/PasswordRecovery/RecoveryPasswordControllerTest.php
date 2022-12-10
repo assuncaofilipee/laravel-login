@@ -1,32 +1,34 @@
 <?php
 
-namespace Tests\Feature\Password;
+namespace Tests\Feature\PasswordRecovery;
 
+use App\Models\PasswordReset;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
+use App\Services\PasswordResetService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use SebastianBergmann\PeekAndPoke\Proxy;
+use Illuminate\Support\Str;
+use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
 
-
-class RecoveryControllerPasswordTest extends TestCase
+class RecoveryPasswordControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $auth;
-    private $user;
-    private $repository;
-
-    /**  Proxy responsável por fazer um mock da classe PasswordRestNotification
-     *   para poder recupear propriedades privadas */
-    private $proxyNotification;
+    private array $auth;
+    private User $user;
+    private MockObject $service;
+    private PasswordResetNotification $proxyNotification;
 
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->service = $this->createMock(PasswordResetService::class);
 
         $this->user =  User::factory()->create([
             'password' => Hash::make('123456ff')
@@ -42,10 +44,7 @@ class RecoveryControllerPasswordTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeSendsRecoveryCodeToUser()
+    public function testShouldBeSendsRecoveryCodeToUser()
     {
         Notification::fake();
 
@@ -54,11 +53,7 @@ class RecoveryControllerPasswordTest extends TestCase
         Notification::assertSentTo($this->user, PasswordResetNotification::class);
     }
 
-    /**
-     * @test
-     *
-     */
-    public function shouldBeNotSendRecoveryCodeWithInvalidEmail()
+    public function testShouldBeNotSendRecoveryCodeWithInvalidEmail(): void
     {
         Notification::fake();
 
@@ -67,10 +62,7 @@ class RecoveryControllerPasswordTest extends TestCase
         Notification::assertNotSentTo($this->user, PasswordResetNotification::class);
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeValidatePasswordToken()
+    public function testShouldBeValidatePasswordToken(): void
     {
         Notification::fake();
 
@@ -80,7 +72,7 @@ class RecoveryControllerPasswordTest extends TestCase
             $this->user,
             PasswordResetNotification::class,
             function ($notification) {
-                $this->proxyNotification = new Proxy($notification);
+                $this->proxyNotification = $notification;
                 return $notification !== null;
             }
         );
@@ -90,13 +82,8 @@ class RecoveryControllerPasswordTest extends TestCase
             ->assertJsonStructure(['success', 'data' => ['password_token']]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotValidatePasswordTokenWithInvalidToken()
+    public function testShouldNotValidatePasswordTokenWithInvalidToken(): void
     {
-        Notification::fake();
-
         $this->post('/app/validate-password-token', ['password_token' => 'abcdf'])
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson(
@@ -109,14 +96,22 @@ class RecoveryControllerPasswordTest extends TestCase
             );
     }
 
-
-    /**
-     * @test
-     */
-    public function shouldNotValidatePasswordTokenWithMoreThanSixCaracteres()
+    public function testShouldNotValidatePasswordTokenWithExpiredToken(): void
     {
-        Notification::fake();
+        $this->post('/app/validate-password-token', ['password_token' =>  $this->getValidToken()])
+            ->assertStatus(JsonResponse::HTTP_UNAUTHORIZED)
+            ->assertJson(
+                [
+                    'success' => false,
+                    'error' => [
+                        'message' => 'Código de verificação expirado.'
+                    ]
+                ]
+            );
+    }
 
+    public function testShouldNotValidatePasswordTokenWithMoreThanSixCaracteres(): void
+    {
         $this->post('/app/validate-password-token', ['password_token' => 'abcdefg'])
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson(
@@ -131,10 +126,7 @@ class RecoveryControllerPasswordTest extends TestCase
             );
     }
 
-    /**
-     * @test
-     */
-    public function shouldBeResetNewPassword()
+    public function testShouldBeResetNewPassword(): void
     {
         Notification::fake();
 
@@ -144,7 +136,7 @@ class RecoveryControllerPasswordTest extends TestCase
             $this->user,
             PasswordResetNotification::class,
             function ($notification) {
-                $this->proxyNotification = new Proxy($notification);
+                $this->proxyNotification = $notification;
                 return $notification !== null;
             }
         );
@@ -162,13 +154,8 @@ class RecoveryControllerPasswordTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotBeResetNewPasswordWithoutFields()
+    public function testShouldNotBeResetNewPasswordWithoutFields(): void
     {
-        Notification::fake();
-
         $this->post('/app/new-password')
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
@@ -184,13 +171,8 @@ class RecoveryControllerPasswordTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotBeResetNewPasswordWithInvalidPassword()
+    public function testShouldNotBeResetNewPasswordWithInvalidPassword(): void
     {
-        Notification::fake();
-
         $this->post('/app/new-password', ['password' => '123', 'password_confirmation' => '123'])
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
@@ -204,13 +186,8 @@ class RecoveryControllerPasswordTest extends TestCase
             ]);
     }
 
-    /**
-     * @test
-     */
-    public function shouldNotResetNewPasswordWithInvalidToken()
+    public function testShouldNotResetNewPasswordWithInvalidToken(): void
     {
-        Notification::fake();
-
         $this->post('/app/new-password', ['password_token' => 'abcd14', 'password' => '1234abcd', 'password_confirmation' => '1234abcd'])
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJson([
@@ -219,5 +196,32 @@ class RecoveryControllerPasswordTest extends TestCase
                     'message' => 'Token para alteração de senha inválido.'
                 ]
             ]);
+    }
+
+    public function testShouldReturnForbiddenWithExpiredToken(): void
+    {
+
+        $this->post('/app/new-password', ['password_token' => $this->getValidToken(), 'password' => '1234abcd', 'password_confirmation' => '1234abcd'])
+            ->assertStatus(JsonResponse::HTTP_FORBIDDEN)
+            ->assertJson(
+                [
+                    'success' => false,
+                    'error' => [
+                        'message' => 'Token para alteração de senha expirado.'
+                    ]
+                ]
+            );
+    }
+
+    public function getValidToken(): string
+    {
+        $token = Str::random(6);
+        PasswordReset::create([
+            "user_id" => $this->user->id,
+            "token_signature" => hash('md5', $token),
+            "used_token" => 1,
+            "expires_at" => Carbon::now()
+        ]);
+        return $token;
     }
 }

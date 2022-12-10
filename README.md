@@ -2,6 +2,7 @@
 
 <p align="center">
   <img src="public/img/access-control.png">
+  <img src="public/img/coverage.png">
 </p>
 
 :small_blue_diamond: [Descrição do projeto](#descrição-do-projeto)

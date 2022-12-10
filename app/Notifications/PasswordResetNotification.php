@@ -11,7 +11,7 @@ class PasswordResetNotification extends Notification  implements ShouldQueue
 {
     use Queueable;
 
-    protected $password_token;
+    public $password_token;
     /**
      * Criação de nova instância
      *

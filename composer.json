@@ -14,7 +14,6 @@
         "laravel/horizon": "^5.8",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "sebastian/peek-and-poke": "1.0.x-dev",
         "tymon/jwt-auth": "*"
     },
     "require-dev": {

@@ -1,7 +1,8 @@
 FROM php:8.0.2-fpm
 
 RUN pecl install xdebug \
-&& docker-php-ext-enable xdebug 
+&& docker-php-ext-enable xdebug \
+&& echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 ARG user
 ARG uid
