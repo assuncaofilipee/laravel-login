@@ -5,16 +5,19 @@ namespace App\Repositories;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
+use App\Repositories\Interfaces\PasswordResetRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
-class PasswordResetRepository
+class PasswordResetRepository implements PasswordResetRepositoryInterface
 {
     private PasswordReset $passwordReset;
+    private User $user;
 
-    public function __construct(PasswordReset $passwordReset)
+    public function __construct(PasswordReset $passwordReset, User $user)
     {
         $this->passwordReset = $passwordReset;
+        $this->user = $user;
     }
 
     public function getResetCode(): string
@@ -24,8 +27,7 @@ class PasswordResetRepository
 
     public function sendPasswordResentLink(string $email): PasswordReset
     {
-        $user = User::where('email', $email)->first();
-
+        $user = $this->user::where('email', $email)->first();
         $token = $this->getResetCode();
         $signature = hash('md5', $token);
         $user->notify(new PasswordResetNotification($token));

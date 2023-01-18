@@ -19,7 +19,6 @@
         </exclude>
         <include>
             <directory suffix=".php">./app/Http/Controllers/Api/v1</directory>
-            <directory suffix=".php">./app/Services</directory>
             <directory suffix=".php">./app/Repositories</directory>
             <directory suffix=".php">./app/Notifications</directory>
         </include>

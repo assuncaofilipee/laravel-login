@@ -5,7 +5,6 @@ namespace Tests\Feature\PasswordRecovery;
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
-use App\Services\PasswordResetService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\JsonResponse;
@@ -28,8 +27,6 @@ class RecoveryPasswordControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->createMock(PasswordResetService::class);
-
         $this->user =  User::factory()->create([
             'password' => Hash::make('123456ff')
         ]);
@@ -44,7 +41,7 @@ class RecoveryPasswordControllerTest extends TestCase
         ];
     }
 
-    public function testShouldBeSendsRecoveryCodeToUser()
+    public function testShouldBeSendsRecoveryCodeToUser(): void
     {
         Notification::fake();
 
@@ -200,7 +197,6 @@ class RecoveryPasswordControllerTest extends TestCase
 
     public function testShouldReturnForbiddenWithExpiredToken(): void
     {
-
         $this->post('/app/new-password', ['password_token' => $this->getValidToken(), 'password' => '1234abcd', 'password_confirmation' => '1234abcd'])
             ->assertStatus(JsonResponse::HTTP_FORBIDDEN)
             ->assertJson(

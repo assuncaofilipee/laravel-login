@@ -1,23 +1,22 @@
 <?php
 
-namespace Tests\Unit\Services;
+namespace Tests\Unit\Repositories;
 
 use App\Models\PasswordReset;
 use App\Models\User;
 use App\Notifications\PasswordResetNotification;
-use App\Services\PasswordResetService;
+use App\Repositories\PasswordResetRepository;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Notification;
-use SebastianBergmann\PeekAndPoke\Proxy;
 use Tests\TestCase;
 
-class PasswordResetServiceTest extends TestCase
+class PasswordResetRepositoryTest extends TestCase
 {
     use DatabaseTransactions;
 
     private User $user;
-    private PasswordResetService $passwordResetService;
+    private PasswordResetRepository $passwordResetRepository;
     private PasswordResetNotification $proxyNotification;
     private PasswordReset $resetToken;
 
@@ -27,11 +26,10 @@ class PasswordResetServiceTest extends TestCase
 
         $this->user =  User::factory()->create();
 
-        $passwordReset = new PasswordReset();
-        $this->passwordResetService = new PasswordResetService($passwordReset);
+        $this->passwordResetRepository = new PasswordResetRepository(new PasswordReset(), new User());
 
         Notification::fake();
-        $this->passwordResetService->sendPasswordResentLink($this->user->email);
+        $this->passwordResetRepository->sendPasswordResentLink($this->user->email);
 
         Notification::assertSentTo(
             $this->user,
@@ -42,7 +40,7 @@ class PasswordResetServiceTest extends TestCase
             }
         );
 
-        $this->resetToken = $this->passwordResetService->getResetToken($this->proxyNotification->password_token);
+        $this->resetToken = $this->passwordResetRepository->getResetToken($this->proxyNotification->password_token);
     }
 
     public function testSendEmailText(): void
@@ -58,7 +56,7 @@ class PasswordResetServiceTest extends TestCase
 
     public function testShouldGetResetCodeIsAlphaNumericString(): void
     {
-        $token = $this->passwordResetService->getResetCode();
+        $token = $this->passwordResetRepository->getResetCode();
         $this->assertTrue(ctype_alnum($token));
         $this->assertEquals(strlen($token), 6);
     }
@@ -66,13 +64,13 @@ class PasswordResetServiceTest extends TestCase
     public function testShouldSendPasswordResentLink(): void
     {
         Notification::fake();
-        $this->passwordResetService->sendPasswordResentLink($this->user->email);
+        $this->passwordResetRepository->sendPasswordResentLink($this->user->email);
         Notification::assertSentTo($this->user, PasswordResetNotification::class);
     }
 
     public function testShouldGetResetIdentifierCode(): void
     {
-        $newToken = $this->passwordResetService->getResetIdentifierCode($this->resetToken);
+        $newToken = $this->passwordResetRepository->getResetIdentifierCode($this->resetToken);
 
         $this->assertTrue(ctype_alnum($newToken));
         $this->assertEquals(strlen($newToken), 6);
@@ -85,7 +83,7 @@ class PasswordResetServiceTest extends TestCase
 
     public function ShouldExpiresToken(): void
     {
-        $this->assertTrue($this->passwordResetService->expiresTokenNow($this->resetToken));
+        $this->assertTrue($this->passwordResetRepository->expiresTokenNow($this->resetToken));
         $token = $this->resetToken->fresh();
         sleep(1);
         $this->assertLessThan(Carbon::now()->toArray()['formatted'], $token->expires_at);

@@ -29,6 +29,9 @@ Projeto construído para comprovar conhecimentos nas tecnologias:
 - Login, refresh token e logout;
 - Recuperação de senha via email;
 
+# Design Pattern
+- Repository Pattern
+
 # Pré-requisitos:
 
 Ter instalado em seu computador docker e docker compose.

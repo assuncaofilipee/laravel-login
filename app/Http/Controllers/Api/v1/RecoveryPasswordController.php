@@ -6,18 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordRecovery\PasswordRecoveryRequest;
 use App\Http\Requests\PasswordRecovery\PasswordResetRequest;
 use App\Http\Requests\PasswordRecovery\PasswordTokenValidateRequest;
-use App\Services\PasswordResetService;
+use App\Repositories\Interfaces\PasswordResetRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 
 class RecoveryPasswordController extends Controller
 {
-    private $service;
+    private PasswordResetRepositoryInterface $passwordResetRepositoryInterface;
 
-    public function __construct(PasswordResetService $service)
+    public function __construct(PasswordResetRepositoryInterface $passwordResetRepositoryInterface)
     {
-        $this->service = $service;
+        $this->passwordResetRepositoryInterface = $passwordResetRepositoryInterface;
     }
 
     /**
@@ -73,7 +73,7 @@ class RecoveryPasswordController extends Controller
      */
     public function sendPasswordResetToken(PasswordRecoveryRequest $request): JsonResponse
     {
-        $this->service->sendPasswordResentLink($request->get('email'));
+        $this->passwordResetRepositoryInterface->sendPasswordResentLink($request->get('email'));
 
         return response()->success([
             "message" => "Código de recuperação de senha enviado ao seu email."
@@ -159,7 +159,7 @@ class RecoveryPasswordController extends Controller
      */
     public function validatePasswordResetToken(PasswordTokenValidateRequest $request): JsonResponse
     {
-        $resetToken = $this->service->getResetToken($request->get('password_token'));
+        $resetToken = $this->passwordResetRepositoryInterface->getResetToken($request->get('password_token'));
 
         if (empty($resetToken)) {
             return response()->error([
@@ -173,10 +173,10 @@ class RecoveryPasswordController extends Controller
             ], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        $newToken = $this->service->getResetIdentifierCode($resetToken);
+        $newToken = $this->passwordResetRepositoryInterface->getResetIdentifierCode($resetToken);
 
         if ($newToken) {
-            $this->service->expiresTokenNow($resetToken);
+            $this->passwordResetRepositoryInterface->expiresTokenNow($resetToken);
 
             return response()->success([
                 "password_token" => $newToken
@@ -267,7 +267,7 @@ class RecoveryPasswordController extends Controller
      */
     public function setNewAccountPassword(PasswordResetRequest $request): JsonResponse
     {
-        $verifyToken = $this->service->getResetToken($request->get('password_token'));
+        $verifyToken = $this->passwordResetRepositoryInterface->getResetToken($request->get('password_token'));
 
         if (empty($verifyToken)) {
             return response()->error([
@@ -285,7 +285,7 @@ class RecoveryPasswordController extends Controller
         $verifyToken->user->password = $newPassword;
 
         if ($verifyToken->user->save()) {
-            $this->service->expiresTokenNow($verifyToken);
+            $this->passwordResetRepositoryInterface->expiresTokenNow($verifyToken);
 
             return response()->success([
                 "message" => "Senha alterada com sucesso."

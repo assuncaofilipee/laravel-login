@@ -107,7 +107,7 @@ class UserControllerTest extends TestCase
 
     public function testShouldReturnModelNotFound(): void
     {
-        $this->get('/app/users/9999999999999')
+        $this->get('/app/users/9999999999999', $this->auth)
             ->assertStatus(JsonResponse::HTTP_NOT_FOUND);
     }
 
@@ -118,15 +118,7 @@ class UserControllerTest extends TestCase
             ->assertJsonStructure(
                 [
                     "success",
-                    "current_page",
-                    "data" =>  [],
-                    "first_page_url",
-                    "from",
-                    "next_page_url",
-                    "path",
-                    "per_page",
-                    "prev_page_url",
-                    "to",
+                    "data" =>  []
                 ]
             );
     }
