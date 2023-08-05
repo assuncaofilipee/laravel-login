@@ -1,6 +1,6 @@
 <?php
 
-namespace App\swagger\responses;
+namespace App\Swagger\responses;
 /**
  * @OA\Response(
      *      response="forbidden",

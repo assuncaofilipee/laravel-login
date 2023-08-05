@@ -22,7 +22,6 @@
                 ],
                 "summary": "Autenticar usuário",
                 "description": "Retorna usuário logado",
-                "operationId": "342ade8140987f5ceae4440337c216fe",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -156,7 +155,6 @@
                 ],
                 "summary": "Desconectar usuário",
                 "description": "Desconecta um usuário conectado",
-                "operationId": "45468c7cb12267053791dbe5825d037e",
                 "responses": {
                     "200": {
                         "description": "Usuário Desconectado",
@@ -208,7 +206,6 @@
                 ],
                 "summary": "Obter novo token",
                 "description": "Retorna informações do usuário e um novo token",
-                "operationId": "6d6cf921991439f285f6f40acf213c9d",
                 "responses": {
                     "200": {
                         "description": "Token atualizado",
@@ -241,7 +238,6 @@
                 ],
                 "summary": "Obter dados do usuário conectado",
                 "description": "Retorna informações do usuário conectado",
-                "operationId": "26cc16fd7bf378902db25ce59c26e740",
                 "responses": {
                     "200": {
                         "description": "Dados do usuário conectado",
@@ -297,7 +293,6 @@
                 ],
                 "summary": "Recuperar senha",
                 "description": "Envia um código de recuperação ao email informado.",
-                "operationId": "6e772c6a1b43cd8d8af73e05bcac449f",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -390,7 +385,6 @@
                 ],
                 "summary": "Validar código de verificação",
                 "description": "Válida código de verificação enviado ao email.",
-                "operationId": "66aabca5a25c369e7588f20c5b336ffa",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -526,7 +520,6 @@
                 ],
                 "summary": "Nova senha",
                 "description": "Criação de nova senha.",
-                "operationId": "4816c7f37cbfaf004c920ca91c530a07",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -670,7 +663,6 @@
                 ],
                 "summary": "Busca todos os usuários cadastrados",
                 "description": "Retorna todos os usuários cadastrados",
-                "operationId": "c763b0c73e83e3f268c2dcf071a91a8b",
                 "responses": {
                     "200": {
                         "description": "Dados dos usuários cadastrados",
@@ -694,23 +686,17 @@
                                 },
                                 "example": {
                                     "success": "true",
-                                    "current_page": 1,
-                                    "data": {
-                                        "email": "exemplo@gmail.com",
-                                        "name": "Exemplo",
-                                        "cpf": "98364797085",
-                                        "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
-                                        "updated_at": "2022-02-09T19:32:49.000000Z",
-                                        "created_at": "2022-02-09T19:32:49.000000Z",
-                                        "deleted_at": null
-                                    },
-                                    "first_page_url": "http://localhost:6001/app/user?page=1",
-                                    "from": 1,
-                                    "next_page_url": null,
-                                    "path": "http://localhost:6001/app/user",
-                                    "per_page": 10,
-                                    "prev_page_url": null,
-                                    "to": 1
+                                    "data": [
+                                        {
+                                            "email": "exemplo@gmail.com",
+                                            "name": "Exemplo",
+                                            "cpf": "98364797085",
+                                            "uuid": "fbd5d732-137b-462b-bfd1-d32b23209fa5",
+                                            "updated_at": "2022-02-09T19:32:49.000000Z",
+                                            "created_at": "2022-02-09T19:32:49.000000Z",
+                                            "deleted_at": null
+                                        }
+                                    ]
                                 }
                             }
                         }
@@ -734,7 +720,6 @@
                 ],
                 "summary": "Cadastro de usuário",
                 "description": "Retorna as informações do usuário cadastrado",
-                "operationId": "a17f0a08690c37a5e408fab4aaf6b148",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -882,7 +867,6 @@
                 ],
                 "summary": "Busca as informações do usuário solicitado",
                 "description": "Retorna informações do usuário solicitado",
-                "operationId": "89bf3a84015e62df52ae03680044cfdc",
                 "responses": {
                     "200": {
                         "description": "Dados do usuário solicitado",
@@ -938,7 +922,6 @@
                 ],
                 "summary": "Atualiza as informações do usuário enviado",
                 "description": "Retorna o usuário atualizado",
-                "operationId": "df05d3a8fe05877f0d604cad0db4b66b",
                 "responses": {
                     "200": {
                         "description": "Dados do usuário solicitado",
@@ -994,7 +977,6 @@
                 ],
                 "summary": "Deleta o usuário enviado",
                 "description": "Retorna status code 204 Not Content",
-                "operationId": "8be039f326fc00c74198370530b0417a",
                 "responses": {
                     "204": {
                         "description": ""
