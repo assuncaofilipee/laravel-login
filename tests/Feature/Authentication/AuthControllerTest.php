@@ -33,7 +33,7 @@ class AuthControllerTest extends TestCase
         ];
     }
 
-    public function testShouldReturnTokenInLogin()
+    public function testShouldReturnTokenInLogin(): void
     {
         $this->post('/app/login', ['email' => $this->user->email, 'password' => '123456ff'])
             ->assertSuccessful()
@@ -56,7 +56,7 @@ class AuthControllerTest extends TestCase
             );
     }
 
-    public function testShoundReturnInvalidEmailInLogin()
+    public function testShoundReturnInvalidEmailInLogin(): void
     {
         $this->post('/app/login', [
             'email' => 'fulano@gmail.com',
@@ -71,7 +71,7 @@ class AuthControllerTest extends TestCase
             ]);
     }
 
-    public function testShoundReturnInvalidPasswordInLogin()
+    public function testShoundReturnInvalidPasswordInLogin(): void
     {
         $this->post('/app/login', [
             'email' => $this->user->email,
@@ -86,7 +86,7 @@ class AuthControllerTest extends TestCase
             ]);
     }
 
-    public function testShouldReturnInvalidFieldsInLogin()
+    public function testShouldReturnInvalidFieldsInLogin(): void
     {
         $this->post('/app/login')
             ->assertStatus(JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
@@ -103,7 +103,7 @@ class AuthControllerTest extends TestCase
             ]);
     }
 
-    public function testShouldReturnEmailInGetMe()
+    public function testShouldReturnEmailInGetMe(): void
     {
         $this->get('/app/me', $this->auth)
             ->assertSuccessful()
@@ -112,7 +112,7 @@ class AuthControllerTest extends TestCase
             ]);
     }
 
-    public function testShoudReturnForbiddenInGetMeData()
+    public function testShoudReturnForbiddenInGetMeData(): void
     {
         $this->get('/app/me')
             ->assertStatus(JsonResponse::HTTP_FORBIDDEN)
@@ -124,7 +124,7 @@ class AuthControllerTest extends TestCase
             ]);
     }
 
-    public function testShouldLogout()
+    public function testShouldLogout(): void
     {
         $this->post('/app/logout', [], $this->auth)
             ->assertSuccessful()
@@ -136,7 +136,7 @@ class AuthControllerTest extends TestCase
             ]);
     }
 
-    public function testShouldReturnTokenInRefresh()
+    public function testShouldReturnTokenInRefresh(): void
     {
         $this->post('/app/refresh', [], $this->auth)
             ->assertSuccessful()
